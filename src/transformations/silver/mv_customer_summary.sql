@@ -1,0 +1,2 @@
+-- Placeholder for a silver materialized view.
+-- TODO: Replace this example with challenge-specific silver view logic.
