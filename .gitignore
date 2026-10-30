@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.databricks/
+bundle.*.json
+data/
+.env

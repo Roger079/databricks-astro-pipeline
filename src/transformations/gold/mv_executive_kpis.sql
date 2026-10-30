@@ -1,2 +1,0 @@
--- Placeholder for a gold materialized view containing reporting metrics.
--- TODO: Replace this example with challenge-specific gold view logic.

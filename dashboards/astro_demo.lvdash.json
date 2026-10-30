@@ -1,0 +1,411 @@
+{
+  "datasets": [
+    {
+      "name": "daily",
+      "displayName": "DEMO · Importe POS diario",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.astro_taco_demo.gold_daily_sales",
+        "measures": [
+          {
+            "name": "reported_total",
+            "expr": "SUM(reported_total)",
+            "displayName": "Importe POS sintético"
+          },
+          {
+            "name": "transactions",
+            "expr": "SUM(transactions)",
+            "displayName": "Tickets publicados"
+          },
+          {
+            "name": "average_ticket",
+            "expr": "SUM(reported_total) / NULLIF(SUM(transactions), 0)",
+            "displayName": "Ticket promedio ponderado"
+          }
+        ],
+        "dimensions": [
+          {
+            "name": "business_date",
+            "expr": "business_date",
+            "displayName": "Fecha"
+          },
+          {
+            "name": "store_id",
+            "expr": "store_id",
+            "displayName": "Tienda"
+          }
+        ]
+      }
+    },
+    {
+      "name": "quality",
+      "displayName": "DEMO · Calidad",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.astro_taco_demo.gold_quality_summary",
+        "measures": [
+          {
+            "name": "source_rows",
+            "expr": "SUM(source_rows)",
+            "displayName": "Filas fuente"
+          },
+          {
+            "name": "quarantined_rows",
+            "expr": "SUM(quarantined_rows)",
+            "displayName": "Filas en cuarentena"
+          },
+          {
+            "name": "duplicate_candidate_rows",
+            "expr": "SUM(duplicate_candidate_rows)",
+            "displayName": "Filas duplicadas candidatas"
+          }
+        ]
+      }
+    },
+    {
+      "name": "menu",
+      "displayName": "DEMO · Unidades por categoría",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.astro_taco_demo.gold_menu_performance",
+        "measures": [
+          {
+            "name": "units",
+            "expr": "SUM(units)",
+            "displayName": "Unidades"
+          }
+        ],
+        "dimensions": [
+          {
+            "name": "report_group",
+            "expr": "report_group",
+            "displayName": "Categoría"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "demo",
+      "displayName": "DEMO · Datos sintéticos",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "name": "counter_0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "measure(reported_total)",
+                      "expression": "MEASURE(`reported_total`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Importe POS"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(reported_total)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "measure(transactions)",
+                      "expression": "MEASURE(`transactions`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Tickets publicados"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(transactions)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "measure(average_ticket)",
+                      "expression": "MEASURE(`average_ticket`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Ticket promedio"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(average_ticket)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quality",
+                  "fields": [
+                    {
+                      "name": "measure(source_rows)",
+                      "expression": "MEASURE(`source_rows`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Filas fuente"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(source_rows)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quality",
+                  "fields": [
+                    {
+                      "name": "measure(quarantined_rows)",
+                      "expression": "MEASURE(`quarantined_rows`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Cuarentena"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(quarantined_rows)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quality",
+                  "fields": [
+                    {
+                      "name": "measure(duplicate_candidate_rows)",
+                      "expression": "MEASURE(`duplicate_candidate_rows`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Duplicados candidatos"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(duplicate_candidate_rows)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "category_units",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "menu",
+                  "fields": [
+                    {
+                      "name": "report_group",
+                      "expression": "`report_group`"
+                    },
+                    {
+                      "name": "measure(units)",
+                      "expression": "MEASURE(`units`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "frame": {
+                "showTitle": true,
+                "title": "DEMO · Unidades por categoría (datos inventados)"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "report_group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(units)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ]
+    }
+  ]
+}

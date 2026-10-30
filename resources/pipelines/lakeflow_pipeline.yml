@@ -1,2 +1,15 @@
-# Lakeflow pipeline configuration placeholder.
-# TODO: Configure the pipeline, source files, compute, and target catalog/schema.
+resources:
+  pipelines:
+    taco_pipeline:
+      name: Astro Taco Bueno transformations
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      continuous: false
+      edition: ADVANCED
+      libraries:
+        - notebook:
+            path: ../../notebooks/02_transform.py
+      configuration:
+        astro.catalog: ${var.catalog}
+        astro.schema: ${var.schema}
