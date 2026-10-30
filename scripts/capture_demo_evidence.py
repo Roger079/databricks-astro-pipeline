@@ -1,22 +1,33 @@
-"""Capture actual demo run status, reconciliation and expectations using ASTRO.
+"""Capture corrected demo status, reconciliation and expectations by profile.
 
 Read-only apart from issuing SELECT statements and saving local evidence JSON.
 Does not deploy resources or change grants. Run after the demo Job finishes.
 """
 import argparse
 import datetime
+import hashlib
 import json
 from pathlib import Path
 import subprocess
 import time
 from zoneinfo import ZoneInfo
 
-PIPELINE = '1d827004-d26d-4ade-8ea9-51f0c31597e8'
 WAREHOUSE = '2b3b47b4d4cf4f3d'
 ROOT = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser()
+parser.add_argument('--run-id', required=True)
+parser.add_argument('--pipeline-id', required=True)
+parser.add_argument('--profile', default='datathon')
+parser.add_argument('--schema', default='astro_taco_main_demo')
+parser.add_argument('--output', default='docs/evidence/main-demo-verification.json')
+options = parser.parse_args()
+import re
+assert re.fullmatch(r'astro_[A-Za-z0-9_]+_demo', options.schema)
+assert re.fullmatch(r'[A-Za-z0-9-]+', options.pipeline_id)
+DB = f'workspace.{options.schema}'
 
 def cli(*args):
-    output = subprocess.check_output(['databricks', *args, '--profile', 'ASTRO', '--output', 'json'], text=True)
+    output = subprocess.check_output(['databricks', *args, '--profile', options.profile, '--output', 'json'], text=True, encoding='utf-8')
     return json.loads(output)
 
 def query(sql):
@@ -34,10 +45,7 @@ def query(sql):
         result = cli('api', 'get', f"/api/2.0/sql/statements/{result['statement_id']}")
     raise TimeoutError('SQL did not finish within the capture window')
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--run-id', required=True)
-args = parser.parse_args()
-run = cli('jobs', 'get-run', args.run_id)
+run = cli('jobs', 'get-run', options.run_id)
 assert run['state'].get('result_state') == 'SUCCESS', run['state']
 assert all(t['state'].get('result_state') == 'SUCCESS' for t in run['tasks']), 'Not all tasks succeeded'
 
@@ -50,15 +58,15 @@ metrics = query("""SELECT
   (SELECT sum(reported_total) FROM workspace.astro_taco_demo.gold_daily_sales) reported_total,
   (SELECT count(*) FROM workspace.astro_taco_demo.bronze_pos WHERE _astro_demo IS NULL OR NOT _astro_demo) unmarked_demo_bronze_rows,
   (SELECT count(*) FROM workspace.astro_taco_demo.gold_daily_sales WHERE is_demo IS NULL OR NOT is_demo) unmarked_demo_gold_rows
-""")
+""".replace('workspace.astro_taco_demo', DB))
 row = metrics['rows'][0]
-for key, expected in [('source_rows', 8), ('silver_rows', 7), ('quarantine_rows', 1), ('published_checks', 2), ('review_checks', 3), ('unmarked_demo_bronze_rows', 0), ('unmarked_demo_gold_rows', 0)]:
+for key, expected in [('source_rows', 8), ('silver_rows', 7), ('quarantine_rows', 1), ('published_checks', 3), ('review_checks', 2), ('unmarked_demo_bronze_rows', 0), ('unmarked_demo_gold_rows', 0)]:
     assert int(row[key]) == expected, (key, row[key])
-assert float(row['reported_total']) == 18.0
+assert float(row['reported_total']) == 28.0
 
 expectations = query(f"""SELECT timestamp, origin.update_id update_id,
     origin.flow_name flow_name, details:flow_progress.data_quality.expectations expectations
-  FROM event_log('{PIPELINE}')
+  FROM event_log('{options.pipeline_id}')
   WHERE event_type = 'flow_progress'
     AND details:flow_progress.data_quality.expectations IS NOT NULL
   ORDER BY timestamp DESC LIMIT 10""")
@@ -66,12 +74,20 @@ expectations = query(f"""SELECT timestamp, origin.update_id update_id,
 evidence = {
     'captured_at': datetime.datetime.now(ZoneInfo('America/Monterrey')).isoformat(),
     'data_kind': 'synthetic_demo_only',
-    'real_source_status': 'SELECT denied; business amount grain still unconfirmed',
+    'real_source_status': 'Two-day source in scope; financial contract not yet confirmed for dev',
+    'schema': DB,
+    'pipeline_id': options.pipeline_id,
+    'source_sha256': {
+        p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in [*sorted(ROOT.glob('src/transformations/**/*.py')),
+                  *sorted(ROOT.glob('notebooks/*.py'))]
+    },
     'run_id': run['run_id'], 'run_url': run['run_page_url'], 'state': run['state'],
     'tasks': [{'task_key': t['task_key'], 'run_id': t['run_id'], 'state': t['state']} for t in run['tasks']],
     'reconciliation': metrics, 'expectations': expectations,
 }
-path = ROOT/'docs/evidence/demo-verification.json'
+path = ROOT/options.output
+assert path.resolve() != (ROOT/'docs/evidence/demo-verification.json').resolve(), 'Preserve original evidence'
 path.parent.mkdir(exist_ok=True)
 path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2)+'\n')
 print(json.dumps({'state': 'verified', 'run_id': run['run_id'], 'metrics': row, 'evidence_file': str(path)}, ensure_ascii=False))

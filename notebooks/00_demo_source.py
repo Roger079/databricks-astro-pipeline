@@ -20,9 +20,9 @@ rows = [
  ('2','bad-date','102','11:00:00','11:01:00','5','0.4','0','0','Taco','5','0','0','1','Sale','Tacos','Card'),
  ('2','1/23/2025','103','16:00:00','16:01:00','-5','-0.4','0','0','Taco','-5','0','0','1','Refund','Tacos','Card'),
  ('2','1/23/2025','104','17:00:00','17:01:00','0','0','0','5','Taco','5','0','5','0','Sale','Tacos','Card'),
- ('2','1/23/2025','105','17:00:00','17:01:00','5','0.4','0','0','Taco','5','0','0','1','Sale','Tacos','Card'),
+ ('2','1/23/2025','105','17:00:00','17:01:00','10','0.8','0','0','Taco','5','0','0','1','Sale','Tacos','Card'),
 ]
-rows.append(rows[-1])  # Candidate duplicate, requires review; never silently drop.
+rows.append(rows[-1])  # Two identical tacos: preserve both; check total is counted once.
 spark.createDataFrame(rows, columns).withColumn('_astro_demo', F.lit(True)).write.format('delta').mode('overwrite').option('overwriteSchema', 'true').option('delta.columnMapping.mode', 'name').saveAsTable(f'{catalog}.{schema}.demo_pos_source')
 print(f'source_table={catalog}.{schema}.demo_pos_source; amount_grain=check')
-# Expected: 8 source rows, 1 quarantine row, 2 published tickets, reported_total=18.
+# Expected: 8 source rows, 1 quarantine row, 3 published tickets, reported_total=28.

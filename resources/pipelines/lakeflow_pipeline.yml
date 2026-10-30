@@ -8,8 +8,8 @@ resources:
       continuous: false
       edition: ADVANCED
       libraries:
-        - notebook:
-            path: ../../notebooks/02_transform.py
+        - glob:
+            include: ../../src/transformations/**
       configuration:
         astro.catalog: ${var.catalog}
         astro.schema: ${var.schema}

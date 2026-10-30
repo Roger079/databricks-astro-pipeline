@@ -1,3 +1,5 @@
+> Registro histórico de la implementación original de Magda (4d2aef2). Los bloqueos de permisos y rutas descritos aquí corresponden a esa revisión. Para el estado corregido de main, ver README, delivery_checklist.md y la nueva evidencia main-demo-verification.json. No mezclar el importe sintético original 18 con el nuevo 28.
+
 # Compatibilidad con el workspace del equipo
 
 Revisión de metadatos realizada el 29 de octubre de 2026, perfil ASTRO.

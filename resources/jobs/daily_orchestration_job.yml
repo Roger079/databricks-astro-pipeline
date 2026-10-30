@@ -19,6 +19,7 @@ resources:
               schema: ${var.schema}
               source_table: ${var.source_table}
               amount_grain: ${var.amount_grain}
+              team_principals: ${var.team_principals}
         - task_key: transform
           depends_on:
             - task_key: ingest

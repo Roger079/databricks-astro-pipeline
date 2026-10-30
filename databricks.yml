@@ -11,10 +11,20 @@ variables:
     default: astro_taco_dev
   source_table:
     default: workspace.default.tb_daily_tld_01_01_2026_m
-    description: catalog.schema.table with original Taco Bueno POS data
+    description: Real two-day POS source (Dec 31, 2025 and Jan 1, 2026)
   amount_grain:
     default: unconfirmed
     description: Confirm line or check with data owner
+  team_principals:
+    default: a01236573@tec.mx,a00842807@tec.mx,a01381456@tec.mx
+    description: Workspace team members granted access to new project schemas
+permissions:
+  - user_name: a01236573@tec.mx
+    level: CAN_MANAGE
+  - user_name: a00842807@tec.mx
+    level: CAN_MANAGE
+  - user_name: a01381456@tec.mx
+    level: CAN_MANAGE
 workspace:
   host: https://dbc-cfb7f93a-b497.cloud.databricks.com
 targets:
@@ -24,8 +34,8 @@ targets:
   demo:
     mode: development
     variables:
-      schema: astro_taco_demo
-      source_table: workspace.astro_taco_demo.demo_pos_source
+      schema: astro_taco_main_demo
+      source_table: ${var.catalog}.${var.schema}.demo_pos_source
       amount_grain: check
     resources:
       jobs:

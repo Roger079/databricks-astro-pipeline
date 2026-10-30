@@ -1,0 +1,103 @@
+{
+  "captured_at": "2026-10-29T23:01:08.804940-06:00",
+  "data_kind": "synthetic_demo_only",
+  "real_source_status": "Two-day source in scope; financial contract not yet confirmed for dev",
+  "schema": "workspace.astro_taco_main_demo",
+  "pipeline_id": "1e1836b0-dba3-4b08-ac67-e6eb31225c91",
+  "source_sha256": {
+    "src/transformations/gold/mv_channel_hourly.py": "3613804d855d7cba2f41481163f26eb6de1f25baa825b0082bf7c2f17aea5c30",
+    "src/transformations/gold/mv_data_quality.py": "019b302c6ef15f8642625bb2078266eda580403b59ac929c57f1b308e1399e18",
+    "src/transformations/gold/mv_item_daily.py": "c463838aa17d0c6b73851adccc5a9c82bdf9429a972204ae6d974ec9ca2c7069",
+    "src/transformations/gold/mv_store_daily.py": "643faae3a22599ca69b1c0d39baa6b5ba61421eba0eab4520f28fcb923e76fd0",
+    "src/transformations/silver/mv_pos_checks.py": "4c3c6e449b6799248f04456c61729df616e09bd95da70a447cf138d2def09001",
+    "src/transformations/silver/mv_pos_classified.py": "fc46fd7f330f3149de3c2288ec2cac6c171bb5e52ddfcd864a29aff3915ac537",
+    "src/transformations/silver/mv_pos_typed.py": "cd6d5a0cb0725983e2529af6f6ed2988e7dbe7fd644350cbfe33c66a5ca1f38c",
+    "notebooks/00_demo_source.py": "23bd14d56720d53f181e776bd13e133ae9001bdec975fd84642f31057de7b481",
+    "notebooks/01_ingest.py": "6fa540d3210f5f666cb44c0217ed0ed736d35bf6413e5b9fb68106e955fb5ad0",
+    "notebooks/03_validate.py": "d747fa004cabdc057874504c019865d98af4fa13b409480e07bfa30b1b8f9f87",
+    "notebooks/04_analysis.py": "b44408b5ddc009ca48598b18a0fdcaf1a40b29953eabb3452b5f1fec1160475f",
+    "notebooks/05_source_diagnostics.py": "90d8bb796262748b2cbffe7c0f63182aa7b503396c73cccf1f79d0e62faa164b"
+  },
+  "run_id": 323117183870679,
+  "run_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/822272637459337/run/323117183870679",
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "tasks": [
+    {
+      "task_key": "validate",
+      "run_id": 976303359806453,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "transform",
+      "run_id": 131468595946299,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "ingest",
+      "run_id": 939217331825384,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "analysis",
+      "run_id": 493196955682324,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    }
+  ],
+  "reconciliation": {
+    "statement_id": "01f1d41e-e1eb-1c8b-a371-f83ec86a0f14",
+    "rows": [
+      {
+        "source_rows": "8",
+        "silver_rows": "7",
+        "quarantine_rows": "1",
+        "published_checks": "3",
+        "review_checks": "2",
+        "reported_total": "28.0000",
+        "unmarked_demo_bronze_rows": "0",
+        "unmarked_demo_gold_rows": "0"
+      }
+    ]
+  },
+  "expectations": {
+    "statement_id": "01f1d41e-eae8-14db-809e-cc75e7365119",
+    "rows": [
+      {
+        "timestamp": "2026-10-30T04:59:28.016Z",
+        "update_id": "aaac1c6b-e98c-4f15-9fdd-ff7d977a9746",
+        "flow_name": "workspace.astro_taco_main_demo.silver_pos",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos\",\"passed_records\":7,\"failed_records\":0},{\"name\":\"valid_key\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos\",\"passed_records\":7,\"failed_records\":0}]"
+      },
+      {
+        "timestamp": "2026-10-30T04:59:08.543Z",
+        "update_id": "aaac1c6b-e98c-4f15-9fdd-ff7d977a9746",
+        "flow_name": "workspace.astro_taco_main_demo.silver_pos_typed",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos_typed\",\"passed_records\":8,\"failed_records\":0},{\"name\":\"valid_date\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos_typed\",\"passed_records\":7,\"failed_records\":1}]"
+      }
+    ]
+  }
+}

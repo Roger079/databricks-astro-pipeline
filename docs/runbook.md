@@ -1,3 +1,5 @@
+> Alcance acordado: dos días reales, no la fuente histórica completa. Estado y pendientes actuales en delivery_checklist.md. Las tablas se definen en src/transformations.
+
 # Operación y validación en Databricks
 
 ## Primera ejecución
@@ -8,7 +10,7 @@
    No crear recursos en default. El bundle usa serverless Jobs/notebooks además
    de Lakeflow serverless; confirmar que ambos estén habilitados.
 2. Ejecutar demo en esquema exclusivo y confirmar los resultados del README.
-3. Revisar que 02 haya publicado las tablas y el event log muestre expectations.
+3. Revisar que el pipeline haya publicado las tablas y el event log muestre expectations.
 4. Abrir 03: debe reconciliar Bronze = Silver + cuarentena, tickets clasificados
    = publicados + revisión y agregados diarios/horarios con tickets.
 5. Reejecutar el Job: mismas cuentas/importes de negocio si no cambió la fuente.
@@ -22,7 +24,7 @@ Transformación tiene timeout 4 h. Validación/análisis tienen timeout 1 h cada
 Las dependencias impiden análisis si falla una etapa anterior.
 
 Si falla 01, Bronze anterior permanece si el fallo fue antes del overwrite Delta.
-Si falla 02, algunas tablas pueden estar en versiones de refresh diferentes:
+Si falla el pipeline, algunas tablas pueden estar en versiones de refresh diferentes:
 no presentar resultados hasta refrescar exitosamente y validar. Reparar el Job
 desde la tarea fallida con Repair run; si cambió fuente/contrato, ejecutar el Job
 completo. No ejecutar otra escritura a Bronze mientras esté refrescando Lakeflow.

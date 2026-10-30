@@ -1,129 +1,133 @@
 # Astro · Taco Bueno
 
-Pipeline de análisis de ventas POS: importe reportado, transacciones, categorías,
-horarios y calidad. Implementación en notebooks Databricks source (`.py` con celdas),
-Lakeflow Spark Declarative Pipelines y un Job desplegable mediante bundle.
+Demostración de ingesta y procesamiento de **dos días de datos POS reales**:
+31 de diciembre de 2025 y 1 de enero de 2026, desde
+`workspace.default.tb_daily_tld_01_01_2026_m`. No se requiere procesar la fuente
+histórica de 85 millones de filas para esta entrega.
 
-Estado: entorno `demo` desplegado en Databricks y ejecución sintética realizada;
-la verificación se registra en `docs/execution_evidence.md`. No validado con datos
-reales: la cuenta actual no tiene SELECT sobre la fuente. Fuente identificada por metadatos:
-`workspace.default.tb_daily_tld_01_01_2026_m`; falta confirmar su semántica.
-Los Excel GRC pertenecen a otro dominio y no se usan aquí. El PDF previo se usa
-como contexto del proyecto, no como evidencia de resultados de esta implementación.
+El snapshot Bronze lee una tabla que ya existe en Databricks. Esto demuestra
+ingesta tabla-a-tabla; no afirma cargar archivos externos. Confirmar con el
+enunciado si se necesita demostrar también el paso original de archivo a tabla.
 
-## Flujo
+## Estado
 
-```mermaid
-flowchart LR
-  A[Tabla POS existente] --> B[01 Ingesta: snapshot Bronze]
-  B --> C[02 Lakeflow: tipado y clasificación]
-  C --> Q[Cuarentena y tickets bajo revisión]
-  C --> S[Silver: líneas y tickets publicables]
-  S --> G[Gold: diario, horarios, categorías]
-  C --> D[Gold: resumen de calidad]
-  G --> V[03 Validación]
-  D --> V
-  V --> N[04 Análisis y gráficas]
+El trabajo original de Magda está preservado en `magda` (commit `4d2aef2`) y fue
+integrado en `main` con un merge. Su demo original y evidencia se conservan.
+Las correcciones de main se prueban en `workspace.astro_taco_main_demo`, separado
+de `workspace.astro_taco_demo` y de las tablas reales del equipo.
+Consultar [evidencia](docs/execution_evidence.md) y [pendientes](docs/delivery_checklist.md).
+`dev` conserva `amount_grain=unconfirmed`: una prueba sintética no confirma la
+definición financiera de la fuente real.
+
+## Estructura requerida
+
+```text
+databricks.yml
+resources/
+  jobs/daily_orchestration_job.yml
+  pipelines/lakeflow_pipeline.yml
+src/transformations/
+  silver/
+    mv_pos_typed.py
+    mv_pos_classified.py
+    mv_pos_checks.py
+  gold/
+    mv_store_daily.py
+    mv_channel_hourly.py
+    mv_item_daily.py
+    mv_data_quality.py
+notebooks/
+  00_demo_source.py
+  01_ingest.py
+  03_validate.py
+  04_analysis.py
+  05_source_diagnostics.py
+tests/test_pipeline.py
+dashboards/astro_demo.lvdash.json
+docs/
 ```
 
-## Archivos
+Orquestación en `resources`; lógica de tablas Silver/Gold en
+`src/transformations`, siguiendo la plantilla del reto. Los notebooks restantes
+son herramientas de ingesta, diagnóstico, validación y presentación.
 
-- `notebooks/00_demo_source.py`: datos sintéticos, ejecución manual opcional.
-- `notebooks/01_ingest.py`: contrato de entrada y snapshot Delta atómico.
-- `notebooks/02_transform.py`: materialized views Silver/Gold, expectations y clustering.
-- `notebooks/03_validate.py`: reconciliación de registros, tickets y agregados.
-- `notebooks/04_analysis.py`: consultas y gráficas sobre las tablas finales.
-- `notebooks/05_source_diagnostics.py`: diagnóstico manual de solo lectura para
-  confirmar grano cuando se conceda SELECT; no pertenece al Job diario.
-- `resources/`: configuración del Job y pipeline; `databricks.yml`: bundle.
-- `docs/`: contrato, operación y guía para presentar la rúbrica.
-- `tests/`: pruebas de semántica SQL con fixtures sintéticos.
-- `dashboards/astro_demo.lvdash.json`: dashboard de demostración en borrador;
-  se regenera con `python scripts/build_demo_dashboard.py`.
-- `docs/execution_evidence.md`: resultados y enlaces de las ejecuciones reales
-  de la demo; `docs/source_access.sql`: permisos que debe gestionar el propietario.
+## Flujo y reglas
 
-## Antes de ejecutar
+Fuente → snapshot Bronze → tipado/clasificación Silver → tickets y artículos →
+Gold diario, horario, canales, categorías y calidad → validación → análisis.
 
-Se necesita un workspace con Unity Catalog, Lakeflow serverless y serverless
-para notebooks/Jobs habilitados, y permisos para crear tablas/esquema y ejecutar
-estos recursos. El SQL Warehouse existente no sustituye al compute de notebooks.
-Verificar disponibilidad de pandas/matplotlib en el entorno serverless antes de correr análisis.
-El código usa `pyspark.pipelines` dentro del runtime administrado de Lakeflow.
+- Clave de ticket: tienda + fecha de negocio + número de cheque, pendiente de
+  confirmar si el POS requiere otra columna de identidad.
+- Con grano `check`, Total/Tax/Total Discount se cuentan una vez por ticket si
+  son consistentes; no se publican como ingreso neto auditado.
+- Repeticiones idénticas se preservan y cuentan como candidatos. No se elimina
+  el artículo ni se excluye automáticamente el ticket. La fuente debe ser un
+  snapshot sin cargas duplicadas; si existen, resolverlas por procedencia/ID real.
+- Errores de tipos van a cuarentena; tickets financieros ambiguos van a revisión.
+- Relojes invertidos no se convierten automáticamente en servicios de casi 24 h.
+  La ventana nocturna documentada permite un supuesto marcado; duraciones
+  inválidas no eliminan ventas y no entran en promedios.
+- Se publica cobertura de tickets para explicar las exclusiones del análisis.
 
-1. Obtener `catalog.schema.table` de la fuente POS. Revisar [contrato](docs/data_contract.md).
-2. Confirmar `amount_grain=line` o `check`: aplica a Total, Tax y Total Discount.
-   Si los tres campos tienen granos diferentes, adaptar el contrato antes de ejecutar.
-   El valor por defecto `unconfirmed` bloquea la ingesta.
-3. Usar `workspace.astro_taco_dev` como destino nuevo y exclusivo. La ingesta
-   y el pipeline rechazan esquemas que no empiecen con `astro_`.
-4. Autenticarse con Databricks CLI; nunca guardar tokens en Git.
-5. Crear `.databricks/bundle/dev/variable-overrides.json` (ignorado por Git):
+## Requisitos
 
-```json
-{
-  "catalog": "workspace",
-  "schema": "astro_taco_dev",
-  "source_table": "workspace.default.tb_daily_tld_01_01_2026_m",
-  "amount_grain": "unconfirmed"
-}
+Unity Catalog, serverless Jobs y Lakeflow habilitados. CLI autenticada con perfil
+`datathon` o el perfil propio del equipo; no guardar tokens en Git. La identidad
+que ejecuta necesita leer la fuente y crear/administrar su esquema destino.
+La ingesta concede ALL PRIVILEGES y MANAGE a `team_principals` en el esquema
+proyecto; todos necesitan USE CATALOG en workspace (ya heredado por los usuarios).
+
+## Prueba sintética del código de main
+
+```powershell
+databricks bundle validate -t demo -p datathon --strict
+databricks bundle deploy -t demo -p datathon
+databricks bundle run seed_demo -t demo -p datathon
+databricks bundle run daily_orchestration -t demo -p datathon
 ```
 
-```bash
-databricks bundle validate -t dev
-databricks bundle deploy -t dev
-databricks bundle run daily_orchestration -t dev
+Ejecutar secuencialmente. Esperado: **8 Bronze, 7 Silver, 1 cuarentena,
+3 tickets publicados, 2 en revisión e importe sintético 28**. No son ventas reales.
+El ticket repetido conserva ambos tacos y su importe de ticket se cuenta una vez.
+El horario 23:59 a 00:02 se marca como cruce nocturno supuesto de 180 segundos.
+No mezclar estos resultados con la evidencia histórica de Magda (importe 18).
+
+## Demostración con los dos días reales
+
+1. Ejecutar `notebooks/05_source_diagnostics.py` y documentar el contrato.
+2. Confirmar grano común de Total/Tax/Total Discount. Si difieren, adaptar el
+   código antes de ejecutar. Revisar voids, descuentos y umbrales de exclusión.
+3. Registrar overrides locales ignorados por Git en
+   `.databricks/bundle/dev/variable-overrides.json` con `amount_grain: check`
+   únicamente si ese contrato ha sido confirmado.
+4. Validar, desplegar y ejecutar:
+
+```powershell
+databricks bundle validate -t dev -p datathon --strict
+databricks bundle deploy -t dev -p datathon
+databricks bundle run daily_orchestration -t dev -p datathon
 ```
 
-Reemplazar `unconfirmed` solo tras validar el grano con el equipo. Los comandos
-anteriores del target `dev` son instrucciones para una ejecución futura.
-El bundle fija el host del equipo; usar `--profile ASTRO` con la CLI si se requiere.
-La programación de las 06:00 America/Monterrey está pausada. Activarla en el Job
-solo después de verificar la primera ejecución, permisos, costo y datos.
+El destino es `workspace.astro_taco_dev`; no se sobrescriben las tablas de
+`workspace.default`. El horario de las 06:00 sigue pausado. Un miembro designado
+debe administrar el despliegue compartido: desplegar desde otra identidad crea
+recursos diferentes y no debe apuntarlos simultáneamente al mismo esquema.
 
-## Alternativa desde la interfaz
+## Verificación y presentación
 
-Importar `notebooks/*.py` como notebooks o abrir el repo con Git folders en Databricks.
-Ejecutar 01 con sus widgets. Crear pipeline Lakeflow con 02 como biblioteca,
-catálogo/esquema destino y configuración `astro.catalog`, `astro.schema`.
-Ejecutar el pipeline y después 03 y 04. Para automatizar: crear Job con tareas
-notebook 01 → pipeline 02 → notebook 03 → notebook 04; usar serverless en las tareas
-de notebooks y pasar catálogo/esquema en widgets.
-02 no se ejecuta con Run All en un cluster convencional.
-
-## Demo de extremo a extremo
-
-El target `demo` configura el esquema `workspace.astro_taco_demo`, fuente sintética
-y grano `check`, sin cambiar la configuración del target `dev` para datos reales:
-
-```bash
-databricks bundle validate -t demo --profile ASTRO --strict
-databricks bundle deploy -t demo --profile ASTRO
-databricks bundle run seed_demo -t demo --profile ASTRO
-databricks bundle run daily_orchestration -t demo --profile ASTRO
-```
-
-Ejecutar secuencialmente: no iniciar daily_orchestration hasta que termine seed_demo.
-
-Importar y ejecutar 00 manualmente con un esquema terminado en `_demo`. Usar su
-tabla `demo_pos_source` como `source_table`, el mismo catálogo/esquema y
-`amount_grain=check`. Ejecutar el Job completo. Resultado esperado: 8 filas Bronze,
-7 Silver, 1 cuarentena, 2 tickets publicados, 3 tickets bajo revisión e importe
-publicado 18. La duración del ticket 101 es 180 segundos al cruzar medianoche.
-Los resultados se identifican con `is_demo=true`; no presentarlos como negocio real.
-
-## Pruebas locales
-
-```bash
+```powershell
 python -m pip install -r requirements-test.txt
 python -m unittest discover -s tests -v
 ```
 
-Las pruebas ejecutan las consultas de clasificación y agregación del notebook
-contra DuckDB. No prueban el parser de fechas/tipos de Spark, Delta, decorators,
-clustering, permisos, despliegue ni el motor Lakeflow. Completar estas verificaciones
-en el workspace con la demo antes de usar la fuente real.
+Las pruebas DuckDB ejecutan el SQL real de los archivos; no sustituyen a Spark,
+Delta, Lakeflow ni a la validación con datos reales. El job comprueba conciliación
+de filas, unicidad de tickets, agregados diarios/horarios/canales y cobertura.
 
-Consultar [operación](docs/runbook.md) y [rúbrica y presentación](docs/rubric.md).
-El [inventario y plan de compatibilidad](docs/workspace_compatibility.md) explica
-qué existe en el equipo y cómo migrar los dashboards sin sobrescribirlos.
+Dos fechas permiten explicar el pipeline y comparar tiendas/categorías con
+cobertura explícita. No permiten afirmar tendencias mensuales, estacionalidad ni
+crecimiento interanual. Falta completar el dashboard real y conclusiones.
+
+Ver [arquitectura](docs/architecture.md), [diccionario](docs/data_dictionary.md),
+[contrato](docs/data_contract.md), [operación](docs/runbook.md) y
+[rúbrica](docs/rubric.md).

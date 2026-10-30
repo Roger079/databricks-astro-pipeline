@@ -27,6 +27,16 @@ assert expected.exceptAll(actual).isEmpty() and actual.exceptAll(expected).isEmp
 hourly = table('gold_hourly_sales').agg(F.sum('reported_total'), F.sum('transactions')).first()
 reference = table('silver_checks').agg(F.sum('reported_total'), F.count('*')).first()
 assert tuple(hourly) == tuple(reference), 'Gold horario no reconcilia'
+channels = table('gold_channel_hourly').agg(F.sum('reported_total'), F.sum('transactions')).first()
+assert tuple(channels) == tuple(reference), 'Gold de canales no reconcilia'
+coverage = table('gold_publication_coverage').agg(F.sum('identifiable_checks'), F.sum('published_checks')).first()
+assert coverage[0] == table('silver_checks_profile').count(), 'Cobertura de tickets no reconcilia'
+assert coverage[1] == table('silver_checks').count(), 'Cobertura publicada no reconcilia'
+assert table('silver_pos').filter('duration_seconds < 0 OR duration_seconds > 14400').isEmpty(), 'Duraciones fuera del rango documentado'
+if schema.endswith('_demo'):
+    assert (raw, clean, quarantine) == (8, 7, 1), 'Fixture demo inesperado'
+    assert table('silver_checks').count() == 3 and table('silver_checks_review').count() == 2
+    assert float(reference[0]) == 28.0, 'Importe demo inesperado'
 display(table('gold_quality_summary'))
 display(table('silver_checks_review').limit(100))
 print(f'Validación completa: {raw} Bronze, {clean} Silver y {quarantine} cuarentena')

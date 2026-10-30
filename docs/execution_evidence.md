@@ -1,3 +1,22 @@
+> Registro histórico de la implementación original de Magda (4d2aef2). Los bloqueos de permisos y rutas descritos aquí corresponden a esa revisión. Para el estado corregido de main, ver README, delivery_checklist.md y la nueva evidencia main-demo-verification.json. No mezclar el importe sintético original 18 con el nuevo 28.
+
+## Verificación de las correcciones de main
+
+- Esquema aislado: `workspace.astro_taco_main_demo`. No se reemplazó el demo original.
+- [Job completo corregido](https://dbc-cfb7f93a-b497.cloud.databricks.com/jobs/822272637459337/runs/323117183870679): SUCCESS en ingesta, transformación, validación y análisis.
+- Pipeline `1e1836b0-dba3-4b08-ac67-e6eb31225c91`: update `aaac1c6b-e98c-4f15-9fdd-ff7d977a9746` COMPLETED, leyendo los archivos de src/transformations.
+- API/SQL verificaron 8 Bronze, 7 Silver, 1 cuarentena, 3 tickets publicados,
+  2 en revisión e importe sintético 28.0000. No hay filas demo sin marcar en Bronze/Gold.
+- Evidence: `docs/evidence/main-demo-verification.json`, con estados de las tareas,
+  métricas de expectations y hashes de los archivos probados.
+- 18 pruebas locales pasan; bundle validate --strict pasa en dev y demo.
+- Los tres miembros tienen ALL PRIVILEGES y MANAGE en ambos esquemas demo;
+  la ingesta configura esos permisos para los nuevos esquemas mediante team_principals.
+- El target dev sigue sin ejecutar: falta confirmar contrato de importes y registrar
+  evidencia de la demostración real de dos días. No es necesario cargar 85 millones de filas.
+- El nuevo JSON de dashboard en main apunta al demo corregido; su publicación y
+  la construcción del dashboard real siguen pendientes, sin alterar los dashboards anteriores.
+
 # Ejecución y evidencia · 29 de octubre de 2026 (America/Monterrey)
 
 ## Alcance

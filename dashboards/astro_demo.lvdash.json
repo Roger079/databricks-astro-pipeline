@@ -2,15 +2,15 @@
   "datasets": [
     {
       "name": "daily",
-      "displayName": "DEMO Â· Importe POS diario",
+      "displayName": "DEMO · Importe POS diario",
       "config": {
         "version": "1.1",
-        "source": "workspace.astro_taco_demo.gold_daily_sales",
+        "source": "workspace.astro_taco_main_demo.gold_daily_sales",
         "measures": [
           {
             "name": "reported_total",
             "expr": "SUM(reported_total)",
-            "displayName": "Importe POS sintÃ©tico"
+            "displayName": "Importe POS sintético"
           },
           {
             "name": "transactions",
@@ -39,10 +39,10 @@
     },
     {
       "name": "quality",
-      "displayName": "DEMO Â· Calidad",
+      "displayName": "DEMO · Calidad",
       "config": {
         "version": "1.1",
-        "source": "workspace.astro_taco_demo.gold_quality_summary",
+        "source": "workspace.astro_taco_main_demo.gold_quality_summary",
         "measures": [
           {
             "name": "source_rows",
@@ -64,10 +64,10 @@
     },
     {
       "name": "menu",
-      "displayName": "DEMO Â· Unidades por categorÃ­a",
+      "displayName": "DEMO · Unidades por categoría",
       "config": {
         "version": "1.1",
-        "source": "workspace.astro_taco_demo.gold_menu_performance",
+        "source": "workspace.astro_taco_main_demo.gold_menu_performance",
         "measures": [
           {
             "name": "units",
@@ -79,7 +79,7 @@
           {
             "name": "report_group",
             "expr": "report_group",
-            "displayName": "CategorÃ­a"
+            "displayName": "Categoría"
           }
         ]
       }
@@ -88,7 +88,7 @@
   "pages": [
     {
       "name": "demo",
-      "displayName": "DEMO Â· Datos sintÃ©ticos",
+      "displayName": "DEMO · Datos sintéticos",
       "pageType": "PAGE_TYPE_CANVAS",
       "layoutVersion": "GRID_V1",
       "layout": [
@@ -115,7 +115,7 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Importe POS"
+                "title": "DEMO · Importe POS"
               },
               "encodings": {
                 "value": {
@@ -158,7 +158,7 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Tickets publicados"
+                "title": "DEMO · Tickets publicados"
               },
               "encodings": {
                 "value": {
@@ -201,7 +201,7 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Ticket promedio"
+                "title": "DEMO · Ticket promedio"
               },
               "encodings": {
                 "value": {
@@ -244,7 +244,7 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Filas fuente"
+                "title": "DEMO · Filas fuente"
               },
               "encodings": {
                 "value": {
@@ -287,7 +287,7 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Cuarentena"
+                "title": "DEMO · Cuarentena"
               },
               "encodings": {
                 "value": {
@@ -330,7 +330,7 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Duplicados candidatos"
+                "title": "DEMO · Duplicados candidatos"
               },
               "encodings": {
                 "value": {
@@ -377,7 +377,7 @@
               "widgetType": "bar",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO Â· Unidades por categorÃ­a (datos inventados)"
+                "title": "DEMO · Unidades por categoría (datos inventados)"
               },
               "encodings": {
                 "x": {

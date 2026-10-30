@@ -1,4 +1,4 @@
-"""Execute the notebook's actual aggregation SQL against small DuckDB fixtures.
+"""Execute the pipeline's actual aggregation SQL against small DuckDB fixtures.
 
 DuckDB is a local semantic check, not a replacement for a Lakeflow workspace run.
 """
@@ -25,6 +25,7 @@ class PipelineTests(unittest.TestCase):
         self.db.execute("""CREATE TABLE silver_pos_typed AS SELECT
           1::BIGINT store_id, DATE '2025-01-22' business_date, '100' check_number,
           'Taco' menu_item, 'Tacos' report_group, 'Cash' tender_type, 'sale' transaction_type,
+          'Drive Thru' channel,
           10::DECIMAL(20,4) total, 0.8::DECIMAL(20,4) tax, 0::DECIMAL(20,4) total_discount,
           5::DECIMAL(20,4) menu_price, 0::DECIMAL(20,4) item_discount,
           0::DECIMAL(20,4) item_voided, 0::DECIMAL(20,4) order_voided, 2::DECIMAL(20,4) quantity,
@@ -46,7 +47,15 @@ class PipelineTests(unittest.TestCase):
         sys.modules['pyspark'] = module
         spark = types.SimpleNamespace(conf=types.SimpleNamespace(get=lambda k: 'astro_demo' if k == 'astro.schema' else 'workspace'), sql=lambda sql: sql)
         try:
-            exec(compile((ROOT/'notebooks/02_transform.py').read_text(), '02_transform.py', 'exec'), {'spark': spark})
+            paths = [
+                'silver/mv_pos_typed.py', 'silver/mv_pos_classified.py',
+                'silver/mv_pos_checks.py', 'gold/mv_store_daily.py',
+                'gold/mv_channel_hourly.py', 'gold/mv_item_daily.py',
+                'gold/mv_data_quality.py',
+            ]
+            for path in paths:
+                source = ROOT/'src/transformations'/path
+                exec(compile(source.read_text(encoding='utf-8'), str(source), 'exec'), {'spark': spark})
         finally:
             if previous is None:
                 sys.modules.pop('pyspark', None)
@@ -84,7 +93,9 @@ class PipelineTests(unittest.TestCase):
         self.db.execute("INSERT INTO silver_pos_typed SELECT * FROM silver_pos_typed WHERE source_row_hash='a'")
         self.run_sql()
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos'), 3)
-        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 1)
+        self.assertEqual(self.scalar('SELECT reported_total FROM silver_checks'), 10)
+        self.assertEqual(self.scalar('SELECT sum(units) FROM gold_menu_performance'), 6)
         self.assertEqual(self.scalar('SELECT duplicate_candidate_rows FROM gold_quality_summary'), 2)
 
     def test_invalid_line_blocks_entire_ticket(self):
@@ -97,6 +108,7 @@ class PipelineTests(unittest.TestCase):
     def test_negative_zero_and_void_require_review(self):
         for assignment in ('total=-5', 'quantity=0', 'item_voided=1'):
             with self.subTest(assignment=assignment):
+                self.db.execute("UPDATE silver_pos_typed SET total=10, quantity=2, item_voided=0 WHERE source_row_hash='b'")
                 self.db.execute(f"UPDATE silver_pos_typed SET {assignment} WHERE source_row_hash='b'")
                 self.run_sql()
                 self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
@@ -110,6 +122,36 @@ class PipelineTests(unittest.TestCase):
         self.db.execute("UPDATE silver_pos_typed SET begin_time=TIMESTAMP '1970-01-01 23:59:59.750000', end_time=TIMESTAMP '1970-01-01 00:00:00.250000'")
         self.run_sql()
         self.assertEqual(self.scalar('SELECT duration_seconds FROM silver_checks'), 0.5)
+
+    def test_backwards_daytime_clock_does_not_become_24_hour_service(self):
+        self.db.execute("UPDATE silver_pos_typed SET begin_time=TIMESTAMP '1970-01-01 10:03:00', end_time=TIMESTAMP '1970-01-01 09:53:00'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT duration_seconds FROM silver_checks'), None)
+        self.assertEqual(self.scalar('SELECT transactions FROM gold_daily_sales'), 1)
+        self.assertEqual(self.scalar('SELECT duration_observations FROM gold_daily_sales'), 0)
+        self.assertEqual(self.scalar('SELECT invalid_duration_rows FROM gold_quality_summary'), 2)
+
+    def test_partially_missing_ticket_duration_is_not_reported_as_complete(self):
+        self.db.execute("UPDATE silver_pos_typed SET end_time=NULL WHERE source_row_hash='b'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT duration_seconds FROM silver_checks'), None)
+
+    def test_void_label_blocks_publication_even_with_zero_void_amounts(self):
+        self.db.execute("UPDATE silver_pos_typed SET transaction_type='void'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
+        self.assertIn('transaction_type_review', self.scalar('SELECT review_reason FROM silver_checks_review'))
+
+    def test_channel_metrics_count_each_check_once(self):
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT transactions FROM gold_channel_hourly'), 1)
+        self.assertEqual(self.scalar('SELECT reported_total FROM gold_channel_hourly'), 10)
+        self.assertEqual(self.scalar('SELECT channel FROM gold_channel_hourly'), 'Drive Thru')
+
+    def test_publication_coverage_reconciles(self):
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT sum(identifiable_checks) FROM gold_publication_coverage'), 1)
+        self.assertEqual(self.scalar('SELECT sum(published_checks) FROM gold_publication_coverage'), 1)
 
     def test_quarantine_has_reason(self):
         self.db.execute("UPDATE silver_pos_typed SET business_date=NULL WHERE source_row_hash='b'")
@@ -134,24 +176,26 @@ class PipelineTests(unittest.TestCase):
                 business_date = datetime.datetime.strptime(date, '%m/%d/%Y').date()
             except ValueError:
                 business_date = None
-            values = [int(store), business_date, check, item, category or 'Unknown', tender or 'Unknown', transaction.lower(), total, tax, discount, price, item_discount, item_void, void, qty,
+            values = [int(store), business_date, check, item, category or 'Unknown', tender or 'Unknown', transaction.lower(), 'Unknown', total, tax, discount, price, item_discount, item_void, void, qty,
                 datetime.datetime.fromisoformat('1970-01-01 '+begin), datetime.datetime.fromisoformat('1970-01-01 '+end), hashlib.sha256(repr(row).encode()).hexdigest(), 'check', True, datetime.datetime(2026, 1, 1), 'demo']
             self.db.execute('INSERT INTO silver_pos_typed VALUES ('+','.join('?' for _ in values)+')', values)
         self.run_sql()
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos_typed'), 8)
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos'), 7)
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos_quarantine'), 1)
-        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 2)
-        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks_review'), 3)
-        self.assertEqual(self.scalar('SELECT sum(reported_total) FROM gold_daily_sales'), 18)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 3)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks_review'), 2)
+        self.assertEqual(self.scalar('SELECT sum(reported_total) FROM gold_daily_sales'), 28)
 
     def test_notebook_syntax_and_bundle_paths(self):
-        for path in (ROOT/'notebooks').glob('*.py'):
-            ast.parse(path.read_text())
+        for path in [*ROOT.glob('notebooks/*.py'), *ROOT.glob('src/transformations/**/*.py')]:
+            ast.parse(path.read_text(encoding='utf-8'))
         for path in [ROOT/'databricks.yml', *ROOT.glob('resources/**/*.yml')]:
             parsed = yaml.safe_load(path.read_text())
             self.assertIsInstance(parsed, dict)
         job = yaml.safe_load((ROOT/'resources/jobs/daily_orchestration_job.yml').read_text())['resources']['jobs']['daily_orchestration']
+        libraries = yaml.safe_load((ROOT/'resources/pipelines/lakeflow_pipeline.yml').read_text())['resources']['pipelines']['taco_pipeline']['libraries']
+        self.assertEqual(libraries, [{'glob': {'include': '../../src/transformations/**'}}])
         self.assertEqual(job['schedule']['pause_status'], 'PAUSED')
         keys = {task['task_key'] for task in job['tasks']}
         for task in job['tasks']:

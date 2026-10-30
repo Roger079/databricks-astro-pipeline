@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DB = 'workspace.astro_taco_demo'
+DB = 'workspace.astro_taco_main_demo'
 datasets = [
     {'name': 'daily', 'displayName': 'DEMO · Importe POS diario', 'config': {
         'version': '1.1', 'source': f'{DB}.gold_daily_sales',
