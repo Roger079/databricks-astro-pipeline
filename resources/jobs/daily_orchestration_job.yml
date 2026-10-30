@@ -1,7 +1,7 @@
 resources:
   jobs:
     daily_orchestration:
-      name: Astro Taco Bueno daily
+      name: Astro Taco Bueno ${bundle.target} daily
       max_concurrent_runs: 1
       schedule:
         quartz_cron_expression: '0 0 6 * * ?'
@@ -20,6 +20,7 @@ resources:
               source_table: ${var.source_table}
               amount_grain: ${var.amount_grain}
               team_principals: ${var.team_principals}
+              expected_pipeline_id: ${resources.pipelines.taco_pipeline.id}
         - task_key: transform
           depends_on:
             - task_key: ingest

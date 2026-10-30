@@ -49,3 +49,10 @@ evento append-only confirmada. Las materialized views permiten refresh gestionad
 no se promete que todas las consultas sean incrementales. Clustering por
 fecha/tienda se configura en tablas principales; medir su beneficio antes de
 afirmar mejoras de rendimiento. Ver runbook para recuperación y límites.
+
+## Destinos y procedencia
+
+Main real usa workspace.astro_taco_main_real; main sintético usa
+workspace.astro_taco_main_demo. Astro_taco_dev es un despliegue distinto
+propiedad de Magda. La ingesta fija una versión Delta, registra su número,
+y comprueba la propiedad de tablas existentes antes de sustituir Bronze.

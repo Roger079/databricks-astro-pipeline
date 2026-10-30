@@ -1,7 +1,7 @@
 resources:
   pipelines:
     taco_pipeline:
-      name: Astro Taco Bueno transformations
+      name: Astro Taco Bueno ${bundle.target} transformations
       catalog: ${var.catalog}
       schema: ${var.schema}
       serverless: true

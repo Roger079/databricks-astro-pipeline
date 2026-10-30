@@ -23,15 +23,16 @@ class PipelineTests(unittest.TestCase):
         self.db.execute("CREATE MACRO unix_timestamp(a) AS epoch(a)")
         self.db.execute("CREATE MACRO unix_micros(a) AS epoch_us(a)")
         self.db.execute("""CREATE TABLE silver_pos_typed AS SELECT
-          1::BIGINT store_id, DATE '2025-01-22' business_date, '100' check_number,
+          1::BIGINT store_id, DATE '2025-12-31' business_date, '100' check_number,
           'Taco' menu_item, 'Tacos' report_group, 'Cash' tender_type, 'sale' transaction_type,
           'Drive Thru' channel,
-          10::DECIMAL(20,4) total, 0.8::DECIMAL(20,4) tax, 0::DECIMAL(20,4) total_discount,
+          10.8::DECIMAL(20,4) total, 0.8::DECIMAL(20,4) tax, 0::DECIMAL(20,4) total_discount,
           5::DECIMAL(20,4) menu_price, 0::DECIMAL(20,4) item_discount,
-          0::DECIMAL(20,4) item_voided, 0::DECIMAL(20,4) order_voided, 2::DECIMAL(20,4) quantity,
+          0::DECIMAL(20,4) item_voided, 0::DECIMAL(20,4) order_voided, 1::DECIMAL(20,4) quantity,
           TIMESTAMP '1970-01-01 10:00:00' begin_time, TIMESTAMP '1970-01-01 10:03:00' end_time,
           'a' source_row_hash, 'check' amount_grain, true is_demo,
-          TIMESTAMP '2026-01-01' loaded_at, 'demo' source_table""")
+          TIMESTAMP '2026-01-01' loaded_at, 'demo' source_table,
+          'A_TAX_INCLUSIVE' financial_profile, 'pos-two-day-v1' rule_version""")
         self.db.execute("INSERT INTO silver_pos_typed SELECT * REPLACE ('Drink' AS menu_item, 'b' AS source_row_hash) FROM silver_pos_typed")
         self.definitions = []
         def materialized_view(**options):
@@ -48,6 +49,7 @@ class PipelineTests(unittest.TestCase):
         spark = types.SimpleNamespace(conf=types.SimpleNamespace(get=lambda k: 'astro_demo' if k == 'astro.schema' else 'workspace'), sql=lambda sql: sql)
         try:
             paths = [
+                'silver/mv_store_financial_profiles.py',
                 'silver/mv_pos_typed.py', 'silver/mv_pos_classified.py',
                 'silver/mv_pos_checks.py', 'gold/mv_store_daily.py',
                 'gold/mv_channel_hourly.py', 'gold/mv_item_daily.py',
@@ -72,16 +74,17 @@ class PipelineTests(unittest.TestCase):
 
     def test_check_total_not_multiplied_and_category_not_allocated(self):
         self.run_sql()
-        self.assertEqual(self.scalar('SELECT reported_total FROM silver_checks'), 10)
+        self.assertAlmostEqual(float(self.scalar('SELECT reported_total FROM silver_checks')), 10.8)
+        self.assertEqual(self.scalar('SELECT merchandise_after_discount FROM silver_checks'), 10)
         self.assertEqual(self.scalar('SELECT transactions FROM gold_daily_sales'), 1)
         self.assertEqual(self.scalar('SELECT sum(reported_line_total) FROM gold_menu_performance'), None)
-        self.assertEqual(self.scalar('SELECT reported_total FROM gold_hourly_sales'), 10)
+        self.assertAlmostEqual(float(self.scalar('SELECT customer_total FROM gold_hourly_sales')), 10.8)
 
-    def test_line_grain_sums_lines(self):
+    def test_line_grain_is_not_silently_interpreted_as_check_grain(self):
         self.db.execute("UPDATE silver_pos_typed SET amount_grain='line'")
         self.run_sql()
-        self.assertEqual(self.scalar('SELECT reported_total FROM silver_checks'), 20)
-        self.assertEqual(self.scalar('SELECT sum(reported_line_total) FROM gold_menu_performance'), 20)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
+        self.assertIn('unsupported_amount_grain', self.scalar('SELECT review_reason FROM silver_checks_review'))
 
     def test_conflicting_check_totals_go_to_review(self):
         self.db.execute("UPDATE silver_pos_typed SET total=11 WHERE source_row_hash='b'")
@@ -91,11 +94,12 @@ class PipelineTests(unittest.TestCase):
 
     def test_duplicate_candidates_not_silently_removed(self):
         self.db.execute("INSERT INTO silver_pos_typed SELECT * FROM silver_pos_typed WHERE source_row_hash='a'")
+        self.db.execute('UPDATE silver_pos_typed SET total=16.2, tax=1.2')
         self.run_sql()
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos'), 3)
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 1)
-        self.assertEqual(self.scalar('SELECT reported_total FROM silver_checks'), 10)
-        self.assertEqual(self.scalar('SELECT sum(units) FROM gold_menu_performance'), 6)
+        self.assertAlmostEqual(float(self.scalar('SELECT reported_total FROM silver_checks')), 16.2)
+        self.assertEqual(self.scalar('SELECT sum(units) FROM gold_menu_performance'), 3)
         self.assertEqual(self.scalar('SELECT duplicate_candidate_rows FROM gold_quality_summary'), 2)
 
     def test_invalid_line_blocks_entire_ticket(self):
@@ -105,10 +109,10 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks_review'), 1)
 
-    def test_negative_zero_and_void_require_review(self):
-        for assignment in ('total=-5', 'quantity=0', 'item_voided=1'):
+    def test_negative_amount_and_unexplained_void_require_review(self):
+        for assignment in ('total=-5', 'order_voided=1'):
             with self.subTest(assignment=assignment):
-                self.db.execute("UPDATE silver_pos_typed SET total=10, quantity=2, item_voided=0 WHERE source_row_hash='b'")
+                self.db.execute("UPDATE silver_pos_typed SET total=10.8, quantity=1, order_voided=0 WHERE source_row_hash='b'")
                 self.db.execute(f"UPDATE silver_pos_typed SET {assignment} WHERE source_row_hash='b'")
                 self.run_sql()
                 self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
@@ -140,12 +144,12 @@ class PipelineTests(unittest.TestCase):
         self.db.execute("UPDATE silver_pos_typed SET transaction_type='void'")
         self.run_sql()
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
-        self.assertIn('transaction_type_review', self.scalar('SELECT review_reason FROM silver_checks_review'))
+        self.assertIn('unresolved_financial_record', self.scalar('SELECT review_reason FROM silver_checks_review'))
 
     def test_channel_metrics_count_each_check_once(self):
         self.run_sql()
         self.assertEqual(self.scalar('SELECT transactions FROM gold_channel_hourly'), 1)
-        self.assertEqual(self.scalar('SELECT reported_total FROM gold_channel_hourly'), 10)
+        self.assertAlmostEqual(float(self.scalar('SELECT customer_total FROM gold_channel_hourly')), 10.8)
         self.assertEqual(self.scalar('SELECT channel FROM gold_channel_hourly'), 'Drive Thru')
 
     def test_publication_coverage_reconciles(self):
@@ -169,7 +173,6 @@ class PipelineTests(unittest.TestCase):
         tree = ast.parse((ROOT/'notebooks/00_demo_source.py').read_text())
         assignment = next(n for n in tree.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'rows' for t in n.targets))
         rows = ast.literal_eval(assignment.value)
-        rows.append(rows[-1])
         for row in rows:
             store, date, check, begin, end, total, tax, discount, void, item, price, item_discount, item_void, qty, transaction, category, tender = row
             try:
@@ -177,15 +180,74 @@ class PipelineTests(unittest.TestCase):
             except ValueError:
                 business_date = None
             values = [int(store), business_date, check, item, category or 'Unknown', tender or 'Unknown', transaction.lower(), 'Unknown', total, tax, discount, price, item_discount, item_void, void, qty,
-                datetime.datetime.fromisoformat('1970-01-01 '+begin), datetime.datetime.fromisoformat('1970-01-01 '+end), hashlib.sha256(repr(row).encode()).hexdigest(), 'check', True, datetime.datetime(2026, 1, 1), 'demo']
+                datetime.datetime.fromisoformat('1970-01-01 '+begin), datetime.datetime.fromisoformat('1970-01-01 '+end), hashlib.sha256(repr(row).encode()).hexdigest(), 'check', True, datetime.datetime(2026, 1, 1), 'demo',
+                'A_TAX_INCLUSIVE' if store == '1' else 'B_PRE_DISCOUNT' if store == '2' else None, 'pos-two-day-v1']
             self.db.execute('INSERT INTO silver_pos_typed VALUES ('+','.join('?' for _ in values)+')', values)
         self.run_sql()
-        self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos_typed'), 8)
-        self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos'), 7)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos_typed'), 12)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos'), 11)
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos_quarantine'), 1)
-        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 3)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 5)
         self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks_review'), 2)
-        self.assertEqual(self.scalar('SELECT sum(reported_total) FROM gold_daily_sales'), 28)
+        self.assertAlmostEqual(float(self.scalar('SELECT sum(reported_total) FROM gold_daily_sales')), 38.76)
+        self.assertAlmostEqual(float(self.scalar('SELECT sum(customer_total) FROM gold_daily_sales')), 37.96)
+        self.assertEqual(self.scalar('SELECT sum(merchandise_after_discount) FROM gold_daily_sales'), 35)
+
+    def test_b_profile_discount_is_subtracted_once_and_tax_added_once(self):
+        self.db.execute("DELETE FROM silver_pos_typed WHERE source_row_hash='b'")
+        self.db.execute("UPDATE silver_pos_typed SET financial_profile='B_PRE_DISCOUNT', total=18.53, tax=1.22, total_discount=3.71, item_discount=3.71, menu_price=18.53, transaction_type='discount'")
+        self.run_sql()
+        self.assertAlmostEqual(float(self.scalar('SELECT merchandise_after_discount FROM silver_checks')), 14.82)
+        self.assertAlmostEqual(float(self.scalar('SELECT customer_total FROM silver_checks')), 16.04)
+
+    def test_zero_quantity_component_does_not_block_b_profile(self):
+        self.db.execute("UPDATE silver_pos_typed SET financial_profile='B_PRE_DISCOUNT', total=10")
+        self.db.execute("INSERT INTO silver_pos_typed SELECT * REPLACE (99 AS menu_price, 0 AS quantity, 'c' AS source_row_hash) FROM silver_pos_typed WHERE source_row_hash='a'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 1)
+        self.assertEqual(self.scalar('SELECT sum(units) FROM gold_menu_performance'), 2)
+
+    def test_partial_void_removes_units_without_discarding_valid_b_ticket(self):
+        self.db.execute("UPDATE silver_pos_typed SET financial_profile='B_PRE_DISCOUNT', total=10")
+        self.db.execute("INSERT INTO silver_pos_typed SELECT * REPLACE (0 AS menu_price, 3 AS item_voided, 'void' AS transaction_type, 'c' AS source_row_hash) FROM silver_pos_typed WHERE source_row_hash='a'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 1)
+        self.assertEqual(self.scalar('SELECT sum(units) FROM gold_menu_performance'), 2)
+
+    def test_signed_item_promo_reconciles_without_adding_product_units(self):
+        self.db.execute("UPDATE silver_pos_typed SET total=9.72, tax=.72")
+        self.db.execute("INSERT INTO silver_pos_typed SELECT * REPLACE (-1 AS menu_price, 'Item Promo' AS menu_item, 'c' AS source_row_hash) FROM silver_pos_typed WHERE source_row_hash='a'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT merchandise_after_discount FROM silver_checks'), 9)
+        self.assertEqual(self.scalar('SELECT sum(units) FROM gold_menu_performance'), 2)
+
+    def test_added_duplicate_without_changed_check_total_is_flagged_by_reconciliation(self):
+        self.db.execute("INSERT INTO silver_pos_typed SELECT * FROM silver_pos_typed WHERE source_row_hash='a'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_pos'), 3)
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
+        self.assertIn('accounting_equation_mismatch', self.scalar('SELECT review_reason FROM silver_checks_review'))
+
+    def test_unknown_profile_is_not_guessed_from_number_shape(self):
+        self.db.execute('UPDATE silver_pos_typed SET financial_profile=NULL')
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_checks'), 0)
+        self.assertIn('unknown_store_profile', self.scalar('SELECT review_reason FROM silver_checks_review'))
+
+    def test_zero_total_positive_tax_stays_in_review_even_when_equation_matches(self):
+        self.db.execute("UPDATE silver_pos_typed SET financial_profile='B_PRE_DISCOUNT', total=0, quantity=0")
+        self.run_sql()
+        self.assertIn('zero_source_total_positive_tax', self.scalar('SELECT review_reason FROM silver_checks_review'))
+
+    def test_fully_discounted_b_ticket_is_a_valid_zero_customer_amount(self):
+        self.db.execute("UPDATE silver_pos_typed SET financial_profile='B_PRE_DISCOUNT', total=10, total_discount=10, tax=0, item_discount=5, transaction_type='discount'")
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT customer_total FROM silver_checks'), 0)
+
+    def test_store_profile_map_has_unique_scoped_entries(self):
+        self.run_sql()
+        self.assertEqual(self.scalar('SELECT count(*) FROM silver_store_financial_profiles WHERE NOT is_demo'), 114)
+        self.assertEqual(self.scalar("SELECT count(*) FROM (SELECT store_id,is_demo FROM silver_store_financial_profiles GROUP BY store_id,is_demo HAVING count(*)>1)"), 0)
 
     def test_notebook_syntax_and_bundle_paths(self):
         for path in [*ROOT.glob('notebooks/*.py'), *ROOT.glob('src/transformations/**/*.py')]:
@@ -212,6 +274,19 @@ class PipelineTests(unittest.TestCase):
         expr = compile(ast.Expression(assignment.value), 'names', 'eval')
         names = eval(expr, {'df': types.SimpleNamespace(columns=['Store #', 'Begin Time', '_astro_demo']), 're': re})
         self.assertEqual(names, {'Store #': 'store_id', 'Begin Time': 'begin_time', '_astro_demo': '_astro_demo'})
+
+    def test_foreign_pipeline_is_rejected_before_bronze_write(self):
+        tree = ast.parse((ROOT/'notebooks/01_ingest.py').read_text(encoding='utf-8'))
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'check_pipeline_owners')
+        namespace = {}
+        exec(compile(ast.Module(body=[fn], type_ignores=[]), 'ownership_guard', 'exec'), namespace)
+        guard = namespace['check_pipeline_owners']
+        guard([], 'ours')
+        guard([('silver_pos', 'ours')], 'ours')
+        for owner, expected in [('theirs', 'ours'), (None, 'ours'), ('ours', '')]:
+            with self.subTest(owner=owner, expected=expected):
+                with self.assertRaisesRegex(AssertionError, 'Destino ocupado'):
+                    guard([('silver_pos', owner)], expected)
 
 if __name__ == '__main__':
     unittest.main()

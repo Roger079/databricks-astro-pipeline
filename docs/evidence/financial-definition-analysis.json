@@ -1,0 +1,43 @@
+{
+  "method": "Full dataset; DECIMAL(20,4); absolute residual <= 0.011; observed ticket-number cohorts, not vendor identification",
+  "status": {
+    "state": "SUCCEEDED"
+  },
+  "results": [
+    {
+      "family": "A_long_number",
+      "stores": "78",
+      "tickets": "28810",
+      "source_rows": "216394",
+      "conflicting_ticket_amounts": "0",
+      "reconciled_tickets": "28787",
+      "exception_tickets": "23",
+      "discounted_tickets": "1929",
+      "void_affected_tickets": "379",
+      "tickets_with_discount_rows": "0",
+      "discount_matches_item_discount_sum": "0",
+      "unnormalized_total_once": "439996.4800",
+      "tax_once": "30611.8400",
+      "discount_once": "6118.6000"
+    },
+    {
+      "family": "B_short_number",
+      "stores": "36",
+      "tickets": "11496",
+      "source_rows": "68034",
+      "conflicting_ticket_amounts": "0",
+      "reconciled_tickets": "11480",
+      "exception_tickets": "16",
+      "discounted_tickets": "647",
+      "void_affected_tickets": "213",
+      "tickets_with_discount_rows": "647",
+      "discount_matches_item_discount_sum": "647",
+      "unnormalized_total_once": "165952.2200",
+      "tax_once": "13399.4600",
+      "discount_once": "3259.1900"
+    }
+  ],
+  "source": "workspace.default.tb_daily_tld_01_01_2026_m",
+  "scope": "2025-12-31 and 2026-01-01",
+  "statement_id": "01f1d423-2642-19c5-b4cc-9080709eed23"
+}

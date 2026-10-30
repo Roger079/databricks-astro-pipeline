@@ -8,9 +8,9 @@ datasets = [
     {'name': 'daily', 'displayName': 'DEMO · Importe POS diario', 'config': {
         'version': '1.1', 'source': f'{DB}.gold_daily_sales',
         'measures': [
-            {'name': 'reported_total', 'expr': 'SUM(reported_total)', 'displayName': 'Importe POS sintético'},
+            {'name': 'customer_total', 'expr': 'SUM(customer_total)', 'displayName': 'Importe cliente normalizado sintético'},
             {'name': 'transactions', 'expr': 'SUM(transactions)', 'displayName': 'Tickets publicados'},
-            {'name': 'average_ticket', 'expr': 'SUM(reported_total) / NULLIF(SUM(transactions), 0)', 'displayName': 'Ticket promedio ponderado'},
+            {'name': 'average_ticket', 'expr': 'SUM(customer_total) / NULLIF(SUM(transactions), 0)', 'displayName': 'Ticket promedio ponderado'},
         ],
         'dimensions': [
             {'name': 'business_date', 'expr': 'business_date', 'displayName': 'Fecha'},
@@ -39,7 +39,7 @@ def measure(name):
 
 layout = []
 for index, (dataset, metric, label) in enumerate([
-    ('daily', 'reported_total', 'DEMO · Importe POS'),
+    ('daily', 'customer_total', 'DEMO · Importe cliente normalizado'),
     ('daily', 'transactions', 'DEMO · Tickets publicados'),
     ('daily', 'average_ticket', 'DEMO · Ticket promedio'),
     ('quality', 'source_rows', 'DEMO · Filas fuente'),

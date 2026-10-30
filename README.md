@@ -6,18 +6,29 @@ Demostración de ingesta y procesamiento de **dos días de datos POS reales**:
 histórica de 85 millones de filas para esta entrega.
 
 El snapshot Bronze lee una tabla que ya existe en Databricks. Esto demuestra
-ingesta tabla-a-tabla; no afirma cargar archivos externos. Confirmar con el
-enunciado si se necesita demostrar también el paso original de archivo a tabla.
+ingesta tabla-a-tabla del extracto real entregado al equipo. El job conserva
+la versión Delta leída y demuestra el recorrido reproducible hasta Gold.
+
+## Objetivo comercial
+
+Taco Bueno - Pricing & Promotion Analytics: investigar qué ofertas conviene
+mantener, reconsiderar o volver a probar. La ingesta real de dos días demuestra
+el pipeline; lift, estacionalidad y posible canibalización requieren ampliar el
+análisis a la historia disponible. Ver [plan del dashboard](docs/dashboard_plan.md).
 
 ## Estado
+
+La ejecución real y su rerun ya pasaron: 284,428 filas, 40,257 tickets publicados
+y 49 en revisión, con iguales importes en ambas ejecuciones. Hay 28 pruebas
+locales. Ver [hallazgos](docs/findings.md) y evidencia normalizada.
 
 El trabajo original de Magda está preservado en `magda` (commit `4d2aef2`) y fue
 integrado en `main` con un merge. Su demo original y evidencia se conservan.
 Las correcciones de main se prueban en `workspace.astro_taco_main_demo`, separado
 de `workspace.astro_taco_demo` y de las tablas reales del equipo.
 Consultar [evidencia](docs/execution_evidence.md) y [pendientes](docs/delivery_checklist.md).
-`dev` conserva `amount_grain=unconfirmed`: una prueba sintética no confirma la
-definición financiera de la fuente real.
+`dev` usa `amount_grain=check`, verificado en los 40,306 tickets reales.
+Los perfiles financieros por tienda son inferidos, versionados y comprobados por ecuaciones; ver [análisis](docs/financial_definition_analysis.md).
 
 ## Estructura requerida
 
@@ -28,6 +39,7 @@ resources/
   pipelines/lakeflow_pipeline.yml
 src/transformations/
   silver/
+    mv_store_financial_profiles.py
     mv_pos_typed.py
     mv_pos_classified.py
     mv_pos_checks.py
@@ -42,6 +54,7 @@ notebooks/
   03_validate.py
   04_analysis.py
   05_source_diagnostics.py
+config/store_financial_profiles.json
 tests/test_pipeline.py
 dashboards/astro_demo.lvdash.json
 docs/
@@ -58,12 +71,13 @@ Gold diario, horario, canales, categorías y calidad → validación → anális
 
 - Clave de ticket: tienda + fecha de negocio + número de cheque, pendiente de
   confirmar si el POS requiere otra columna de identidad.
-- Con grano `check`, Total/Tax/Total Discount se cuentan una vez por ticket si
-  son consistentes; no se publican como ingreso neto auditado.
+- Total, Tax y Total Discount se cuentan una vez por ticket. Los perfiles A/B
+  se normalizan a `customer_total` y `merchandise_after_discount`; el Total fuente
+  no se interpreta como una definición uniforme de ventas entre tiendas.
 - Repeticiones idénticas se preservan y cuentan como candidatos. No se elimina
   el artículo ni se excluye automáticamente el ticket. La fuente debe ser un
   snapshot sin cargas duplicadas; si existen, resolverlas por procedencia/ID real.
-- Errores de tipos van a cuarentena; tickets financieros ambiguos van a revisión.
+- Errores de tipos van a cuarentena. Descuentos, cantidades cero y ajustes Item Promo reconocidos se conservan; ecuaciones fallidas y estados ambiguos van a revisión.
 - Relojes invertidos no se convierten automáticamente en servicios de casi 24 h.
   La ventana nocturna documentada permite un supuesto marcado; duraciones
   inválidas no eliminan ventas y no entran en promedios.
@@ -86,20 +100,20 @@ databricks bundle run seed_demo -t demo -p datathon
 databricks bundle run daily_orchestration -t demo -p datathon
 ```
 
-Ejecutar secuencialmente. Esperado: **8 Bronze, 7 Silver, 1 cuarentena,
-3 tickets publicados, 2 en revisión e importe sintético 28**. No son ventas reales.
-El ticket repetido conserva ambos tacos y su importe de ticket se cuenta una vez.
-El horario 23:59 a 00:02 se marca como cruce nocturno supuesto de 180 segundos.
-No mezclar estos resultados con la evidencia histórica de Magda (importe 18).
+Ejecutar secuencialmente. Esperado: **12 Bronze, 11 Silver, 1 cuarentena,
+5 tickets publicados, 2 en revisión, importe cliente normalizado 37.96 y mercancía
+después de descuentos 35**. El Total fuente suma 38.76 y se conserva para rastreo.
+La demo cubre ambos perfiles, artículos repetidos, descuentos, componentes de
+cantidad cero, promo negativa, anulación parcial, fecha inválida, perfil desconocido
+y una diferencia contable. No son ventas reales ni se mezclan con demos históricas.
 
 ## Demostración con los dos días reales
 
-1. Ejecutar `notebooks/05_source_diagnostics.py` y documentar el contrato.
-2. Confirmar grano común de Total/Tax/Total Discount. Si difieren, adaptar el
-   código antes de ejecutar. Revisar voids, descuentos y umbrales de exclusión.
-3. Registrar overrides locales ignorados por Git en
-   `.databricks/bundle/dev/variable-overrides.json` con `amount_grain: check`
-   únicamente si ese contrato ha sido confirmado.
+1. Revisar las reglas inferidas en docs/data_contract.md y los 114 perfiles
+   versionados en config/store_financial_profiles.json.
+2. El grano check ya se verificó en toda la fuente real. No necesita confirmación
+   externa; los tickets se publican solo si cumplen su ecuación y controles.
+3. Eliminar overrides locales antiguos `amount_grain=unconfirmed`, si existen.
 4. Validar, desplegar y ejecutar:
 
 ```powershell
@@ -108,7 +122,7 @@ databricks bundle deploy -t dev -p datathon
 databricks bundle run daily_orchestration -t dev -p datathon
 ```
 
-El destino es `workspace.astro_taco_dev`; no se sobrescriben las tablas de
+El destino es `workspace.astro_taco_main_real`; no se sobrescriben las tablas de
 `workspace.default`. El horario de las 06:00 sigue pausado. Un miembro designado
 debe administrar el despliegue compartido: desplegar desde otra identidad crea
 recursos diferentes y no debe apuntarlos simultáneamente al mismo esquema.
@@ -126,8 +140,23 @@ de filas, unicidad de tickets, agregados diarios/horarios/canales y cobertura.
 
 Dos fechas permiten explicar el pipeline y comparar tiendas/categorías con
 cobertura explícita. No permiten afirmar tendencias mensuales, estacionalidad ni
-crecimiento interanual. Falta completar el dashboard real y conclusiones.
+crecimiento interanual. Consultar docs/delivery_checklist.md para el estado de ejecución real, dashboard y conclusiones.
 
 Ver [arquitectura](docs/architecture.md), [diccionario](docs/data_dictionary.md),
 [contrato](docs/data_contract.md), [operación](docs/runbook.md) y
 [rúbrica](docs/rubric.md).
+
+## Evidencia de ejecución normalizada
+
+Usar `python scripts/capture_run_evidence.py --run-id ID --pipeline-id ID --schema astro_taco_main_real --kind real`
+(o `--schema astro_taco_main_demo --kind demo`). Captura conciliación, perfiles,
+razones de revisión y expectations únicamente dentro de la ventana de ese run.
+Los archivos normalized-*-verification.json están separados de la evidencia histórica.
+
+## Aislamiento entre despliegues
+
+El destino real de main es workspace.astro_taco_main_real. El esquema
+workspace.astro_taco_dev pertenece al pipeline de Magda y no debe reutilizarse
+para este despliegue. La ingesta verifica pipelines.pipelineId antes de escribir
+Bronze; el job pasa expected_pipeline_id automáticamente. El modo manual debe
+proporcionar ese ID cuando ya existen tablas Silver/Gold.

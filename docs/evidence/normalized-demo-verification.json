@@ -1,0 +1,162 @@
+{
+  "captured_at_utc": "2026-10-30T06:16:54.932047+00:00",
+  "data_kind": "synthetic_demo",
+  "schema": "workspace.astro_taco_main_demo",
+  "rule_version": "pos-two-day-v1",
+  "run_id": 362421565514746,
+  "pipeline_id": "1e1836b0-dba3-4b08-ac67-e6eb31225c91",
+  "run_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/822272637459337/run/362421565514746",
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "tasks": [
+    {
+      "task_key": "validate",
+      "run_id": 270013136442875,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "transform",
+      "run_id": 355340815329942,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "ingest",
+      "run_id": 590870015497047,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "analysis",
+      "run_id": 776624349819173,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    }
+  ],
+  "metrics": {
+    "statement_id": "01f1d429-7bb2-1454-a5a1-fb4a8fdf8c73",
+    "rows": [
+      {
+        "source_rows": "12",
+        "silver_rows": "11",
+        "quarantine_rows": "1",
+        "identifiable_checks": "7",
+        "published_checks": "5",
+        "review_checks": "2",
+        "equation_exceptions": "1",
+        "raw_source_total": "38.7600",
+        "customer_total": "37.9600",
+        "merchandise_after_discount": "35.0000",
+        "wrong_data_kind_rows": "0"
+      }
+    ]
+  },
+  "source_snapshot": {
+    "statement_id": "01f1d429-7fa7-1fb7-a1c7-9cc735725a43",
+    "rows": [
+      {
+        "source_table": "workspace.astro_taco_main_demo.demo_pos_source",
+        "delta_version": "1",
+        "amount_grain": "check",
+        "source_rows": "12",
+        "loaded_at": "2026-10-30T06:11:36.706Z"
+      }
+    ]
+  },
+  "review_reasons": {
+    "statement_id": "01f1d429-7ec5-1504-8c2f-56fddfe6b4d1",
+    "rows": [
+      {
+        "review_reason": "accounting_equation_mismatch",
+        "tickets": "1"
+      },
+      {
+        "review_reason": "unknown_store_profile_or_date",
+        "tickets": "1"
+      }
+    ]
+  },
+  "profile_coverage": {
+    "statement_id": "01f1d429-8060-1e85-be10-4699ab1e45e1",
+    "rows": [
+      {
+        "financial_profile": "B_PRE_DISCOUNT",
+        "identifiable_checks": "3",
+        "published_checks": "2",
+        "equation_exceptions": "1"
+      },
+      {
+        "financial_profile": "A_TAX_INCLUSIVE",
+        "identifiable_checks": "3",
+        "published_checks": "3",
+        "equation_exceptions": "0"
+      },
+      {
+        "financial_profile": null,
+        "identifiable_checks": "1",
+        "published_checks": "0",
+        "equation_exceptions": "0"
+      }
+    ]
+  },
+  "expectations": {
+    "statement_id": "01f1d429-8118-1e3d-8146-f70a8f63f3c9",
+    "rows": [
+      {
+        "timestamp": "2026-10-30T06:14:22.000Z",
+        "update_id": "f8961b44-29e9-49c6-9430-db560c736a2a",
+        "flow_name": "workspace.astro_taco_main_demo.silver_checks",
+        "expectations": "[{\"name\":\"reconciled\",\"dataset\":\"workspace.astro_taco_main_demo.silver_checks\",\"passed_records\":5,\"failed_records\":0},{\"name\":\"known_profile\",\"dataset\":\"workspace.astro_taco_main_demo.silver_checks\",\"passed_records\":5,\"failed_records\":0}]"
+      },
+      {
+        "timestamp": "2026-10-30T06:14:13.093Z",
+        "update_id": "f8961b44-29e9-49c6-9430-db560c736a2a",
+        "flow_name": "workspace.astro_taco_main_demo.silver_pos",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos\",\"passed_records\":11,\"failed_records\":0},{\"name\":\"valid_key\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos\",\"passed_records\":11,\"failed_records\":0}]"
+      },
+      {
+        "timestamp": "2026-10-30T06:13:21.051Z",
+        "update_id": "f8961b44-29e9-49c6-9430-db560c736a2a",
+        "flow_name": "workspace.astro_taco_main_demo.silver_pos_typed",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos_typed\",\"passed_records\":12,\"failed_records\":0},{\"name\":\"valid_date\",\"dataset\":\"workspace.astro_taco_main_demo.silver_pos_typed\",\"passed_records\":11,\"failed_records\":1}]"
+      }
+    ]
+  },
+  "source_sha256": {
+    "src/transformations/gold/mv_channel_hourly.py": "5f75bc530ae5b42c81ed75edb999358d4b5c3d98a3df3dcbc8e70e4bb2c7c5ca",
+    "src/transformations/gold/mv_data_quality.py": "55051a7be30edecbc74181fdb433978e243462069dd479aee533651861314bdd",
+    "src/transformations/gold/mv_item_daily.py": "2e99ffc23f4743669597186c0c0df63654e0121a79bcc11b90f05bdd9337e8ef",
+    "src/transformations/gold/mv_store_daily.py": "394b14e2945d2210123fb82536e37fc6c7b3949cfb38f61f7728d7e6ccc089f9",
+    "src/transformations/silver/mv_pos_checks.py": "f4efae665d7eb74f127a213440ebaf77ca59479c91f8451c04897aec154ce4f4",
+    "src/transformations/silver/mv_pos_classified.py": "5efc92bbf5a8fdbdd1959ac95e78de7fda86801cd6fa29eb36f8fd154b7e0ab5",
+    "src/transformations/silver/mv_pos_typed.py": "ac0b9c91c6284f60135b330b771d1ca0f75400e36b63ab6e0af8ae3a3079901c",
+    "src/transformations/silver/mv_store_financial_profiles.py": "719aa5eb106ece426ad78c61afd17e21a087430802886fa8d57985c388978813",
+    "notebooks/00_demo_source.py": "6a155ad5ec29bfb17a198c7e540aa41b4fcdc4bd1287fa871da8b9f9283c865e",
+    "notebooks/01_ingest.py": "2ee069a99d005508ff60d018a0a6b86edbed30f40a35c5c177fa27453839dd82",
+    "notebooks/03_validate.py": "fa557361237276c12b1900cc4b51911f242a8c8211e11708e2e58e859cc3a55b",
+    "notebooks/04_analysis.py": "22d3b71799cae62e8657cb45516409112e2322ef22209afd4b07d49d76781dfa",
+    "notebooks/05_source_diagnostics.py": "90d8bb796262748b2cbffe7c0f63182aa7b503396c73cccf1f79d0e62faa164b",
+    "config/store_financial_profiles.json": "71dd04f74e696e02a48833bf8dc63e083ace07c0039a3449dab11369d683b031"
+  }
+}

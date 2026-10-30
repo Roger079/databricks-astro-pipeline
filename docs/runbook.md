@@ -4,10 +4,11 @@
 
 ## Primera ejecución
 
-1. Confirmar contrato y privilegios: USE CATALOG/SCHEMA, SELECT fuente,
+1. Revisar contrato inferido y privilegios: USE CATALOG/SCHEMA, SELECT fuente,
    CREATE SCHEMA/TABLE/MATERIALIZED VIEW según el workspace y permiso de compute.
    La fuente predeterminada es workspace.default.tb_daily_tld_01_01_2026_m.
-   No crear recursos en default. El bundle usa serverless Jobs/notebooks además
+   Destino main: workspace.astro_taco_main_real. No reutilizar astro_taco_dev,
+   administrado por el despliegue de Magda. No crear recursos en default. El bundle usa serverless Jobs/notebooks además
    de Lakeflow serverless; confirmar que ambos estén habilitados.
 2. Ejecutar demo en esquema exclusivo y confirmar los resultados del README.
 3. Revisar que el pipeline haya publicado las tablas y el event log muestre expectations.
@@ -23,7 +24,10 @@ El Job permite una ejecución concurrente. Ingesta reintenta una vez; timeout 2 
 Transformación tiene timeout 4 h. Validación/análisis tienen timeout 1 h cada una.
 Las dependencias impiden análisis si falla una etapa anterior.
 
-Si falla 01, Bronze anterior permanece si el fallo fue antes del overwrite Delta.
+01 fija la versión Delta de origen y la guarda en _astro_source_version. Antes
+del overwrite valida que las tablas Silver/Gold pertenezcan al pipeline esperado.
+Ante otro propietario se detiene: elegir otro esquema, sin borrar o reasignar
+tablas ajenas. Si falla antes del overwrite, Bronze anterior permanece.
 Si falla el pipeline, algunas tablas pueden estar en versiones de refresh diferentes:
 no presentar resultados hasta refrescar exitosamente y validar. Reparar el Job
 desde la tarea fallida con Repair run; si cambió fuente/contrato, ejecutar el Job

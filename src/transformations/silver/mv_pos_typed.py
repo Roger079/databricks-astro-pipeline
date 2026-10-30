@@ -12,7 +12,7 @@ bronze = f"`{catalog}`.`{schema}`.bronze_pos"
 @dp.expect('valid_total', 'total IS NOT NULL')
 def typed():
     return spark.sql(f"""
-      SELECT try_cast(store_id AS BIGINT) store_id,
+      WITH parsed AS (SELECT try_cast(store_id AS BIGINT) store_id,
         coalesce(cast(try_to_timestamp(trim(cast(`date` AS STRING)), 'M/d/yyyy') AS DATE),
                  try_cast(`date` AS DATE)) business_date,
         nullif(trim(cast(check_number AS STRING)), '') check_number,
@@ -34,5 +34,9 @@ def typed():
         sha2(to_json(struct(*)), 256) source_row_hash,
         _astro_amount_grain amount_grain, _astro_demo is_demo,
         _astro_loaded_at loaded_at, _astro_source source_table
-      FROM {bronze}
+      FROM {bronze})
+      SELECT p.*, m.financial_profile, m.rule_version
+      FROM parsed p LEFT JOIN silver_store_financial_profiles m
+        ON p.store_id = m.store_id AND p.is_demo = m.is_demo
+        AND p.business_date BETWEEN m.valid_from AND m.valid_to
     """)

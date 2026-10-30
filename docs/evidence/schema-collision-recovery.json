@@ -1,0 +1,52 @@
+{
+  "conflicting_schema": "workspace.astro_taco_dev",
+  "run_id": 153617672473786,
+  "run_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/621214800098362/run/153617672473786",
+  "state": {
+    "life_cycle_state": "INTERNAL_ERROR",
+    "result_state": "FAILED",
+    "state_message": "Task transform failed with message: Workload failed, see run output for details. This caused all downstream tasks to get skipped.",
+    "user_cancelled_or_timedout": false
+  },
+  "failure_class": "destination_schema_owned_by_another_pipeline",
+  "resolution": "Use workspace.astro_taco_main_real; ingestion preflight verifies existing table ownership before overwriting Bronze",
+  "owning_pipeline": "be453ec2-6213-44b6-8145-9641eca8a687",
+  "tasks": [
+    {
+      "task_key": "transform",
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "FAILED",
+        "state_message": "Workload failed, see run output for details",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "ingest",
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "validate",
+      "state": {
+        "life_cycle_state": "SKIPPED",
+        "result_state": "UPSTREAM_FAILED",
+        "state_message": "An upstream task failed.",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "analysis",
+      "state": {
+        "life_cycle_state": "SKIPPED",
+        "result_state": "UPSTREAM_FAILED",
+        "state_message": "An upstream task failed.",
+        "user_cancelled_or_timedout": false
+      }
+    }
+  ]
+}

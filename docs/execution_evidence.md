@@ -1,3 +1,25 @@
+# Verificación normalizada actual · 30 de octubre de 2026
+
+- [Primera ejecución real](https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/621214800098362/run/87723745066499): SUCCESS en las cuatro tareas.
+- [Reejecución real](https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/621214800098362/run/435278296555206): SUCCESS; mismas métricas y versión Delta.
+- [Demo normalizada](https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/822272637459337/run/362421565514746): SUCCESS; incluye los dos perfiles y casos de calidad.
+- Destinos: workspace.astro_taco_main_real y workspace.astro_taco_main_demo.
+- Fuente real: 284,428 filas, 40,306 tickets; 40,257 publicados y 49 en revisión.
+- Importes normalizados publicados: customer_total 615,846.68 y
+  merchandise_after_discount 571,874.16. La moneda/settlement no se infieren.
+- Evidencia: normalized-real-first-run.json, normalized-real-verification.json y
+  normalized-demo-verification.json, dentro de docs/evidence.
+- El primer intento real (153617672473786) falló porque astro_taco_dev estaba
+  administrado por otro pipeline. Se aisló el destino y se añadió una verificación
+  de propiedad antes de escribir Bronze. Ver schema-collision-recovery.json.
+- 28 pruebas locales pasan y ambos targets validan con --strict. Schedule pausado.
+- Estado de pendientes en delivery_checklist.md; plan estratégico en dashboard_plan.md.
+
+---
+
+Los registros siguientes son históricos: conservan sus números y parámetros de
+las versiones anteriores de la demo. No son el estado actual del pipeline.
+
 > Registro histórico de la implementación original de Magda (4d2aef2). Los bloqueos de permisos y rutas descritos aquí corresponden a esa revisión. Para el estado corregido de main, ver README, delivery_checklist.md y la nueva evidencia main-demo-verification.json. No mezclar el importe sintético original 18 con el nuevo 28.
 
 ## Verificación de las correcciones de main

@@ -8,9 +8,9 @@
         "source": "workspace.astro_taco_main_demo.gold_daily_sales",
         "measures": [
           {
-            "name": "reported_total",
-            "expr": "SUM(reported_total)",
-            "displayName": "Importe POS sintético"
+            "name": "customer_total",
+            "expr": "SUM(customer_total)",
+            "displayName": "Importe cliente normalizado sintético"
           },
           {
             "name": "transactions",
@@ -19,7 +19,7 @@
           },
           {
             "name": "average_ticket",
-            "expr": "SUM(reported_total) / NULLIF(SUM(transactions), 0)",
+            "expr": "SUM(customer_total) / NULLIF(SUM(transactions), 0)",
             "displayName": "Ticket promedio ponderado"
           }
         ],
@@ -102,8 +102,8 @@
                   "datasetName": "daily",
                   "fields": [
                     {
-                      "name": "measure(reported_total)",
-                      "expression": "MEASURE(`reported_total`)"
+                      "name": "measure(customer_total)",
+                      "expression": "MEASURE(`customer_total`)"
                     }
                   ],
                   "disaggregated": false
@@ -115,11 +115,11 @@
               "widgetType": "counter",
               "frame": {
                 "showTitle": true,
-                "title": "DEMO · Importe POS"
+                "title": "DEMO · Importe cliente normalizado"
               },
               "encodings": {
                 "value": {
-                  "fieldName": "measure(reported_total)",
+                  "fieldName": "measure(customer_total)",
                   "rowNumber": 0
                 }
               },

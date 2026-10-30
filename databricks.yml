@@ -8,13 +8,13 @@ variables:
     default: workspace
     description: Existing Unity Catalog catalog
   schema:
-    default: astro_taco_dev
+    default: astro_taco_main_real
   source_table:
     default: workspace.default.tb_daily_tld_01_01_2026_m
     description: Real two-day POS source (Dec 31, 2025 and Jan 1, 2026)
   amount_grain:
-    default: unconfirmed
-    description: Confirm line or check with data owner
+    default: check
+    description: Ticket-level fields verified across all 40306 real tickets
   team_principals:
     default: a01236573@tec.mx,a00842807@tec.mx,a01381456@tec.mx
     description: Workspace team members granted access to new project schemas

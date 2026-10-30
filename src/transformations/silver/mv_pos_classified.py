@@ -14,10 +14,19 @@ def classified():
         AND quantity IS NOT NULL AND menu_price IS NOT NULL AND item_discount IS NOT NULL
         AND item_voided IS NOT NULL AND order_voided IS NOT NULL AS valid_record,
         count(*) OVER (PARTITION BY source_row_hash) identical_row_count,
-        total < 0 OR tax < 0 OR total_discount < 0 OR menu_price < 0 OR item_discount < 0
-        OR quantity <= 0 OR quantity > 100 OR total > 1000 OR menu_price > 500
-        OR item_voided != 0 OR order_voided != 0
-        OR transaction_type IS NULL OR transaction_type NOT IN ('sale', 'regular sale') AS financial_review,
+        CASE WHEN transaction_type = 'void' OR item_voided > 0 THEN 'voided_item'
+          WHEN quantity = 0 THEN 'zero_quantity_component'
+          WHEN menu_price < 0 AND lower(menu_item) = 'item promo' THEN 'promo_adjustment'
+          WHEN menu_price < 0 THEN 'unresolved_adjustment'
+          WHEN transaction_type = 'discount' THEN 'discounted_item'
+          WHEN menu_price = 0 THEN 'zero_price_component'
+          ELSE 'sale_item' END record_role,
+        total < 0 OR tax < 0 OR total_discount < 0 OR item_discount < 0
+        OR quantity < 0 OR item_voided < 0 OR order_voided != 0
+        OR (menu_price < 0 AND (menu_item IS NULL OR lower(menu_item) != 'item promo'))
+        OR (financial_profile = 'A_TAX_INCLUSIVE' AND quantity != 1)
+        OR transaction_type IS NULL OR transaction_type NOT IN ('sale', 'regular sale', 'discount', 'void')
+        OR (transaction_type = 'void' AND item_voided = 0 AND menu_price != 0) AS financial_review,
         -- A negative clock difference is not sufficient evidence of midnight rollover.
         -- Four hours is a provisional service-time bound, not a financial exclusion.
         CASE WHEN raw_duration BETWEEN 0 AND 14400 THEN raw_duration

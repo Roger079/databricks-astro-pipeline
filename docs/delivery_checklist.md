@@ -1,35 +1,43 @@
-# Cierre de Phase 2
+# Estado de entrega · 30 de octubre de 2026
 
-## Implementado
+## Completado y verificado
 
-- Merge de magda a main conservando el commit original y su evidencia.
-- Orquestación en resources y tablas en src/transformations/silver y gold.
-- Snapshot, tipos decimales, claves de ticket y separación ticket/artículo.
-- Repeticiones preservadas sin bloquear automáticamente la publicación.
-- Duraciones inválidas fuera de promedios, cruce nocturno supuesto marcado.
-- Tipos de transacción ambiguos/voids enviados a revisión.
-- Calidad, cuarentena, review_reason, cobertura y conciliación diaria/horaria/canales.
-- Acceso compartido al esquema nuevo mediante team_principals en la ingesta.
-- Pruebas locales y bundle; evidencia de runtime separada de la demo original.
+- Magda preservada en su rama original; main incluye su trabajo y las correcciones.
+- Plantilla respetada: orquestación en resources y tablas en src/transformations/silver y gold.
+- Contrato financiero inferido de todos los tickets, perfiles por tienda versionados
+  y dos métricas normalizadas; no se requieren recibos que el equipo no tiene.
+- Repeticiones, componentes de cantidad cero, descuentos, promos negativas y
+  anulaciones parciales tratados por rol y conciliación, sin borrar filas idénticas.
+- Duraciones inválidas fuera de promedios; cuarentena y revisión separadas.
+- Ingesta fija la versión Delta y verifica propiedad del destino antes de escribir.
+- Esquemas aislados main_real/main_demo; acceso de los tres miembros configurado.
+- 28 pruebas locales, sintaxis Python y bundle validate --strict en dev/demo.
+- Demo sintética completa: 12 filas, 5 tickets publicados y 2 en revisión;
+  importe cliente 37.96 y mercancía después de descuentos 35.00.
+- Dos ejecuciones reales completas sobre Delta versión 1, con iguales conteos e
+  importes: 284,428 filas, 40,306 tickets identificables, 40,257 publicados y
+  49 en revisión. Cero filas perdidas; 39 diferencias de ecuación dentro de los 49.
+- Importe cliente normalizado 615,846.68; mercancía después de descuentos y sin
+  impuesto 571,874.16. Son métricas analíticas inferidas, no ingresos auditados.
+- Evidencia API/SQL y expectations, falla de propiedad y recuperación, análisis
+  real de cinco hallazgos y consultas reproducibles guardados en docs/validation.
 
-## Pendientes para la entrega real
+## Pendientes de la entrega y del dashboard estratégico
 
-1. Confirmar con recibos/documentación el grano de Total, Tax y Total Discount,
-   la clave del ticket y la política de descuentos/voids. Revisar umbrales
-   financieros y calidad de relojes. No configurar check solo para quitar un bloqueo.
-2. Ejecutar la ingesta y el pipeline con la fuente real de los dos días.
-3. Guardar Run ID, origen/versión, parámetros, DAG, expectativas, conciliación,
-   cobertura y ejemplos de filas. Comparar con tablas anteriores explicando
-   diferencias sin intentar reproducir métricas que duplicaban importes.
-4. Reejecutar sin cambios; probar corrección/borrado de fuente en una copia demo.
-5. Completar dashboard real de desempeño, productos/demanda y calidad, con
-   filtros por fecha/tienda, etiqueta de importe POS y tasas de exclusión.
-6. Escribir tres a cinco hallazgos de los dos días, con cifras verificables y
-   acciones. No afirmar crecimiento anual, estacionalidad ni margen sin costos.
-7. Medir duración/costo y evaluar clustering; configurar avisos de fallas y un
-   umbral acordado de cobertura. Activar schedule solo si aporta a la demostración.
-8. Preparar presentación y ensayo: objetivo, fuente, DAG, transformaciones,
-   calidad, análisis, valor y límites. Otro compañero debe reproducir el runbook.
+1. Ejecutar la prueba de cambio/borrado en una fuente sintética aislada. El rerun
+   sin cambios ya se verificó con los dos días reales.
+2. Construir el dashboard real: filtros consistentes, métricas normalizadas,
+   cobertura y explicación de excepciones; exportar/versionar su definición.
+3. Alinear la estrategia con el reto Pricing & Promotion Analytics: perfilar la
+   historia disponible, validar reglas financieras por tienda/periodo e investigar
+   si pueden identificarse ofertas. Los dos días solos no permiten estacionalidad.
+4. Aplicar docs/dashboard_plan.md: lift con baseline defendible, señales de
+   canibalización y decisiones con confianza explícita; no inventar campañas.
+5. Medir rendimiento/costo y documentar la evaluación de clustering. Configurar
+   avisos de falla y umbrales de cobertura si se acuerdan; horario sigue pausado.
+6. Preparar presentación y ensayo según la rúbrica. Otro compañero debe seguir
+   el runbook y comprobar acceso al dashboard y a la evidencia.
 
-La rúbrica pide evidencia de ejecución y razonamiento, no solo archivos.
-Demo sintética, demostración real y evidencia histórica deben etiquetarse por separado.
+La tabla histórica existe (85.27 millones de filas, 119 tiendas), pero sus métricas
+estratégicas todavía no están normalizadas/publicadas por este pipeline. No
+presentar la consulta exploratoria de factibilidad como un análisis de lift acabado.

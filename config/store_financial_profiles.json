@@ -1,0 +1,1034 @@
+{
+  "version": "pos-two-day-v1",
+  "source": "workspace.default.tb_daily_tld_01_01_2026_m",
+  "mapping_statement_id": "01f1d424-654a-124b-9df4-f5374cddc807",
+  "method": "Frozen per-store winner of accounting identities, minimum 95% fit; no ticket-number heuristic in runtime",
+  "stores": [
+    {
+      "store_id": 5026,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 316,
+      "a_matches": 316,
+      "b_matches": 16,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5053,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 268,
+      "a_matches": 268,
+      "b_matches": 37,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5094,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 433,
+      "a_matches": 433,
+      "b_matches": 17,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5260,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 385,
+      "a_matches": 385,
+      "b_matches": 17,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5261,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 224,
+      "a_matches": 0,
+      "b_matches": 224,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 5262,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 471,
+      "a_matches": 470,
+      "b_matches": 20,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5263,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 246,
+      "a_matches": 0,
+      "b_matches": 244,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 5265,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 336,
+      "a_matches": 335,
+      "b_matches": 26,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5273,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 377,
+      "a_matches": 377,
+      "b_matches": 28,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5355,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 316,
+      "a_matches": 316,
+      "b_matches": 47,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5375,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 329,
+      "a_matches": 329,
+      "b_matches": 25,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5385,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 362,
+      "a_matches": 362,
+      "b_matches": 12,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5458,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 227,
+      "a_matches": 227,
+      "b_matches": 41,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5520,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 395,
+      "a_matches": 395,
+      "b_matches": 13,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5542,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 207,
+      "a_matches": 206,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5569,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 183,
+      "a_matches": 183,
+      "b_matches": 10,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5584,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 370,
+      "a_matches": 370,
+      "b_matches": 21,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5653,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 191,
+      "a_matches": 191,
+      "b_matches": 9,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5744,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 220,
+      "a_matches": 220,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5767,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 361,
+      "a_matches": 361,
+      "b_matches": 19,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5827,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 308,
+      "a_matches": 308,
+      "b_matches": 16,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 5837,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 339,
+      "a_matches": 26,
+      "b_matches": 339,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 5898,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 294,
+      "a_matches": 0,
+      "b_matches": 294,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 5913,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 442,
+      "a_matches": 442,
+      "b_matches": 17,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6143,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 215,
+      "a_matches": 0,
+      "b_matches": 215,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 6170,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 175,
+      "a_matches": 3,
+      "b_matches": 175,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 6252,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 306,
+      "a_matches": 0,
+      "b_matches": 306,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 6295,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 442,
+      "a_matches": 3,
+      "b_matches": 441,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 6310,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 219,
+      "a_matches": 219,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6332,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 373,
+      "a_matches": 372,
+      "b_matches": 11,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6338,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 311,
+      "a_matches": 0,
+      "b_matches": 311,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 6401,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 472,
+      "a_matches": 472,
+      "b_matches": 32,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6463,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 761,
+      "a_matches": 759,
+      "b_matches": 202,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6716,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 465,
+      "a_matches": 465,
+      "b_matches": 25,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6728,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 213,
+      "a_matches": 213,
+      "b_matches": 12,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6741,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 401,
+      "a_matches": 4,
+      "b_matches": 401,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 6763,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 227,
+      "a_matches": 227,
+      "b_matches": 29,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6805,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 234,
+      "a_matches": 234,
+      "b_matches": 18,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6866,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 299,
+      "a_matches": 299,
+      "b_matches": 21,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6876,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 292,
+      "a_matches": 292,
+      "b_matches": 10,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6905,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 456,
+      "a_matches": 454,
+      "b_matches": 20,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 6907,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 389,
+      "a_matches": 389,
+      "b_matches": 20,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7005,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 623,
+      "a_matches": 623,
+      "b_matches": 21,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7006,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 472,
+      "a_matches": 0,
+      "b_matches": 472,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7020,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 241,
+      "a_matches": 0,
+      "b_matches": 238,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7059,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 520,
+      "a_matches": 520,
+      "b_matches": 31,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7152,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 230,
+      "a_matches": 230,
+      "b_matches": 3,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7157,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 267,
+      "a_matches": 267,
+      "b_matches": 19,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7169,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 238,
+      "a_matches": 0,
+      "b_matches": 237,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7185,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 525,
+      "a_matches": 524,
+      "b_matches": 33,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7187,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 231,
+      "a_matches": 231,
+      "b_matches": 9,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7193,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 418,
+      "a_matches": 0,
+      "b_matches": 418,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7211,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 385,
+      "a_matches": 3,
+      "b_matches": 385,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7276,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 656,
+      "a_matches": 656,
+      "b_matches": 145,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7277,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 777,
+      "a_matches": 775,
+      "b_matches": 42,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7370,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 303,
+      "a_matches": 303,
+      "b_matches": 10,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7401,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 452,
+      "a_matches": 1,
+      "b_matches": 452,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7404,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 214,
+      "a_matches": 214,
+      "b_matches": 6,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7577,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 720,
+      "a_matches": 719,
+      "b_matches": 35,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7584,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 193,
+      "a_matches": 193,
+      "b_matches": 6,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7656,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 520,
+      "a_matches": 520,
+      "b_matches": 3,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7786,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 319,
+      "a_matches": 319,
+      "b_matches": 26,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 7910,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 265,
+      "a_matches": 1,
+      "b_matches": 265,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7940,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 288,
+      "a_matches": 0,
+      "b_matches": 288,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7962,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 214,
+      "a_matches": 0,
+      "b_matches": 214,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 7988,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 308,
+      "a_matches": 307,
+      "b_matches": 16,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8032,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 498,
+      "a_matches": 495,
+      "b_matches": 34,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8100,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 491,
+      "a_matches": 491,
+      "b_matches": 59,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8108,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 457,
+      "a_matches": 457,
+      "b_matches": 2,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8112,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 374,
+      "a_matches": 0,
+      "b_matches": 374,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 8113,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 390,
+      "a_matches": 389,
+      "b_matches": 37,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8126,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 493,
+      "a_matches": 492,
+      "b_matches": 25,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8152,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 343,
+      "a_matches": 342,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8241,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 456,
+      "a_matches": 456,
+      "b_matches": 25,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8271,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 230,
+      "a_matches": 0,
+      "b_matches": 228,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 8286,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 438,
+      "a_matches": 438,
+      "b_matches": 8,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8458,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 359,
+      "a_matches": 1,
+      "b_matches": 358,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 8462,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 359,
+      "a_matches": 359,
+      "b_matches": 47,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8509,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 355,
+      "a_matches": 0,
+      "b_matches": 354,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 8561,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 499,
+      "a_matches": 499,
+      "b_matches": 10,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8714,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 334,
+      "a_matches": 25,
+      "b_matches": 334,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 8716,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 388,
+      "a_matches": 388,
+      "b_matches": 10,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8758,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 275,
+      "a_matches": 0,
+      "b_matches": 275,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 8786,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 381,
+      "a_matches": 381,
+      "b_matches": 31,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 8834,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 450,
+      "a_matches": 450,
+      "b_matches": 17,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9037,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 304,
+      "a_matches": 303,
+      "b_matches": 15,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9040,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 337,
+      "a_matches": 337,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9041,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 266,
+      "a_matches": 265,
+      "b_matches": 0,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9042,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 388,
+      "a_matches": 387,
+      "b_matches": 35,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9049,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 256,
+      "a_matches": 256,
+      "b_matches": 9,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9050,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 564,
+      "a_matches": 564,
+      "b_matches": 27,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9089,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 235,
+      "a_matches": 2,
+      "b_matches": 235,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9100,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 330,
+      "a_matches": 0,
+      "b_matches": 329,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9174,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 300,
+      "a_matches": 300,
+      "b_matches": 15,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9375,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 389,
+      "a_matches": 389,
+      "b_matches": 27,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9392,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 268,
+      "a_matches": 268,
+      "b_matches": 27,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9415,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 166,
+      "a_matches": 1,
+      "b_matches": 166,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9464,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 441,
+      "a_matches": 1,
+      "b_matches": 440,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9467,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 232,
+      "a_matches": 0,
+      "b_matches": 232,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9522,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 268,
+      "a_matches": 268,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9532,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 266,
+      "a_matches": 266,
+      "b_matches": 38,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9562,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 254,
+      "a_matches": 254,
+      "b_matches": 8,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9597,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 335,
+      "a_matches": 334,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9646,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 540,
+      "a_matches": 540,
+      "b_matches": 54,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9729,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 376,
+      "a_matches": 376,
+      "b_matches": 7,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9780,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 382,
+      "a_matches": 0,
+      "b_matches": 382,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9788,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 351,
+      "a_matches": 1,
+      "b_matches": 351,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9827,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 504,
+      "a_matches": 0,
+      "b_matches": 504,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9837,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 267,
+      "a_matches": 267,
+      "b_matches": 10,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9881,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 429,
+      "a_matches": 0,
+      "b_matches": 429,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9885,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 270,
+      "a_matches": 3,
+      "b_matches": 268,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9931,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 303,
+      "a_matches": 2,
+      "b_matches": 302,
+      "financial_profile": "B_PRE_DISCOUNT"
+    },
+    {
+      "store_id": 9945,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 196,
+      "a_matches": 196,
+      "b_matches": 11,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    },
+    {
+      "store_id": 9990,
+      "valid_from": "2025-12-31",
+      "valid_to": "2026-01-01",
+      "tickets": 290,
+      "a_matches": 290,
+      "b_matches": 27,
+      "financial_profile": "A_TAX_INCLUSIVE"
+    }
+  ]
+}

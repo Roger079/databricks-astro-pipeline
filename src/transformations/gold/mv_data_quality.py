@@ -21,8 +21,8 @@ def quality():
 def publication_coverage():
     return spark.sql("""SELECT business_date, store_id, is_demo,
       count(*) identifiable_checks,
-      sum(CASE WHEN invalid_lines = 0 AND review_lines = 0 AND
-        (amount_grain = 'line' OR (amount_grain = 'check' AND min_total = max_total
-          AND min_tax = max_tax AND min_discount = max_discount)) THEN 1 ELSE 0 END) published_checks,
+      sum(CASE WHEN is_publishable THEN 1 ELSE 0 END) published_checks,
+      sum(CASE WHEN abs(reconciliation_residual) > 0.011 THEN 1 ELSE 0 END) equation_exception_checks,
+      sum(CASE WHEN financial_profile IS NULL THEN 1 ELSE 0 END) unknown_profile_checks,
       sum(CASE WHEN duplicate_lines > 0 THEN 1 ELSE 0 END) checks_with_repeated_rows
       FROM silver_checks_profile GROUP BY business_date, store_id, is_demo""")

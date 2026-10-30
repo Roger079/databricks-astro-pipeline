@@ -1,10 +1,10 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Demostración de dos días: importe POS de tickets publicables
+# MAGIC # Demostración de dos días: importes normalizados de tickets reconciliados
 # MAGIC No son ingresos netos auditados. Dos fechas no sustentan estacionalidad ni crecimiento anual.
 # COMMAND ----------
 import re
-for k, v in [('catalog', 'workspace'), ('schema', 'astro_taco_dev')]:
+for k, v in [('catalog', 'workspace'), ('schema', 'astro_taco_main_real')]:
     dbutils.widgets.text(k, v)
 catalog, schema = [dbutils.widgets.get(k) for k in ('catalog', 'schema')]
 assert all(re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', x) for x in (catalog, schema))
@@ -14,11 +14,11 @@ def query(sql):
 
 display(query('SELECT * FROM {db}.gold_quality_summary'))
 display(query('SELECT *, identifiable_checks - published_checks AS review_checks FROM {db}.gold_publication_coverage'))
-display(query('SELECT business_date, is_demo, sum(reported_total) reported_total, sum(transactions) transactions, sum(reported_total)/nullif(sum(transactions),0) average_ticket, count(DISTINCT store_id) stores, sum(duration_seconds_sum)/nullif(sum(duration_observations),0) average_duration_seconds FROM {db}.gold_daily_sales GROUP BY business_date,is_demo ORDER BY business_date'))
+display(query('SELECT business_date, is_demo, sum(customer_total) customer_total, sum(merchandise_after_discount) merchandise_after_discount, sum(transactions) transactions, sum(customer_total)/nullif(sum(transactions),0) average_ticket, count(DISTINCT store_id) stores, sum(duration_seconds_sum)/nullif(sum(duration_observations),0) average_duration_seconds FROM {db}.gold_daily_sales GROUP BY business_date,is_demo ORDER BY business_date'))
 # COMMAND ----------
-stores = query('SELECT store_id, sum(reported_total) reported_total, sum(transactions) transactions, count(DISTINCT business_date) observed_days FROM {db}.gold_daily_sales GROUP BY store_id ORDER BY reported_total DESC LIMIT 20')
+stores = query('SELECT store_id, sum(customer_total) customer_total, sum(merchandise_after_discount) merchandise_after_discount, sum(transactions) transactions, count(DISTINCT business_date) observed_days FROM {db}.gold_daily_sales GROUP BY store_id ORDER BY customer_total DESC LIMIT 20')
 categories = query('SELECT report_group, sum(units) units, sum(reported_line_total) reported_line_total FROM {db}.gold_menu_performance GROUP BY report_group ORDER BY units DESC')
-channels = query('SELECT channel, sum(transactions) transactions, sum(reported_total) reported_total FROM {db}.gold_channel_hourly GROUP BY channel ORDER BY transactions DESC')
+channels = query('SELECT channel, sum(transactions) transactions, sum(customer_total) customer_total FROM {db}.gold_channel_hourly GROUP BY channel ORDER BY transactions DESC')
 display(stores)
 display(categories)
 display(channels)
@@ -26,7 +26,7 @@ display(channels)
 # Only bounded aggregates reach the driver.
 import matplotlib.pyplot as plt
 for frame, category, value, title in [
-    (stores, 'store_id', 'reported_total', 'Importe POS por tienda'),
+    (stores, 'store_id', 'customer_total', 'Importe cliente normalizado por tienda · incluye impuestos'),
     (categories.limit(15), 'report_group', 'units', 'Unidades por categoría'),
     (channels.limit(20), 'channel', 'transactions', 'Tickets por canal'),
 ]:

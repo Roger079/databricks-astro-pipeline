@@ -6,6 +6,7 @@ datos sintéticos; source_table/loaded_at trazan la ingesta. Importes DECIMAL(20
 | Tabla | Una fila representa | Uso |
 |---|---|---|
 | bronze_pos | Una ocurrencia de fila fuente | Snapshot sin deduplicación; conserva procedencia |
+| silver_store_financial_profiles | Tienda/población/ventana de fechas | Perfiles inferidos A/B y versión de regla |
 | silver_pos_typed | Una ocurrencia tipada | Fecha, horas, importes y claves normalizados |
 | silver_pos_classified | Una ocurrencia con indicadores | Validez, revisión financiera, repeticiones y calidad de duración |
 | silver_pos_quarantine | Una fila estructuralmente inválida | reject_reason y evidencia |
@@ -22,7 +23,7 @@ datos sintéticos; source_table/loaded_at trazan la ingesta. Importes DECIMAL(20
 
 ## Fórmulas
 
-- Ticket promedio global = SUM(reported_total) / SUM(transactions).
+- Ticket promedio global = SUM(customer_total) / SUM(transactions).
 - Cobertura = SUM(published_checks) / SUM(identifiable_checks).
 - Tickets en revisión = identifiable_checks - published_checks.
 - Duración global = SUM(duration_seconds_sum) / SUM(duration_observations).
@@ -36,3 +37,16 @@ datos sintéticos; source_table/loaded_at trazan la ingesta. Importes DECIMAL(20
 reported_total es un importe POS de tickets publicables; no es ingreso neto,
 margen ni ventas auditadas. Tickets en revisión y filas sin clave se presentan
 por separado para evitar ocultar el alcance de las exclusiones.
+
+## Normalización financiera v1
+
+customer_total incluye Tax según el perfil inferido; merchandise_after_discount
+lo excluye y ya descuenta la rebaja de ticket. reported_total conserva el Total
+fuente, que tiene significados distintos en A/B. reconciliation_residual expresa
+la diferencia con la ecuación; review_reason e is_publishable controlan publicación.
+record_role impide contar anulaciones y promos como unidades vendidas.
+financial_profile/rule_version provienen del lookup versionado, sin heurística
+de número de cheque en el runtime. Config y análisis justifican la selección.
+
+Bronze incluye _astro_source_version, _astro_source y _astro_loaded_at: identifican
+el snapshot Delta exacto leído. Las definiciones semánticas no cambian al reejecutar.
