@@ -1,0 +1,54 @@
+# Ejecución y evidencia · 29 de octubre de 2026 (America/Monterrey)
+
+## Alcance
+
+Entorno sintético aislado `workspace.astro_taco_demo`. No son ventas reales.
+El target `dev` no se ha desplegado ni ejecutado. Los dashboards existentes y las
+tablas del equipo en `workspace.default` se conservaron sin modificaciones.
+La programación del Job sigue pausada.
+
+## Recursos creados
+
+- [Job de demo](https://dbc-cfb7f93a-b497.cloud.databricks.com/jobs/883217129446265?o=7474644614542766).
+- [Pipeline Lakeflow](https://dbc-cfb7f93a-b497.cloud.databricks.com/pipelines/1d827004-d26d-4ade-8ea9-51f0c31597e8?o=7474644614542766).
+- [Dashboard nuevo en borrador, DEMO sintética](https://dbc-cfb7f93a-b497.cloud.databricks.com/dashboardsv3/01f1d4187aef1b3bbc19ed1f4614fcae?o=7474644614542766).
+
+## Pruebas comprobadas
+
+- `databricks bundle validate --strict`: válido en targets dev y demo.
+- Creación de la fuente sintética exitosa: run 790192215608927.
+- Primer Job completo: run 1091416802476266, ingesta, transformación, validación y
+  análisis terminaron SUCCESS. Permitió detectar que la normalización de nombres
+  perdía `_astro_demo`; corregido y agregado un control explícito de esa marca.
+- Las consultas de reconciliación devolvieron 8 filas fuente, 7 Silver, 1 cuarentena,
+  2 tickets publicados, 3 en revisión e importe sintético 18.0000.
+- SQL nativo TIME(6): 23:59:59.750000 → 00:00:00.250000 da 0.500000000 segundos.
+- Event log del primer update: valid_date pasó 7 y falló 1 registro; valid_total
+  pasó los 8; en Silver valid_key y valid_total pasaron sus 7 registros.
+- 13 pruebas locales con DuckDB/PyYAML pasaron después de las correcciones.
+
+La [reejecución corregida](https://dbc-cfb7f93a-b497.cloud.databricks.com/jobs/883217129446265/runs/1078180118409216?o=7474644614542766)
+terminó SUCCESS en las cuatro tareas. Conservó las mismas cuentas e importe de
+negocio, y verificó 0 filas sin marca sintética tanto en Bronze como en Gold.
+La evidencia se guardó en `docs/evidence/demo-verification.json` mediante
+`python scripts/capture_demo_evidence.py --run-id 1078180118409216`.
+Ese archivo es evidencia de API/SQL; no sustituye la interpretación de datos reales.
+
+## Bloqueo de datos reales
+
+La consulta a `workspace.default.tb_daily_tld_01_01_2026_m` falló con
+INSUFFICIENT_PERMISSIONS: la cuenta `a01381456@tec.mx` no tiene SELECT.
+Statement ID: 01f1d417-b86b-1e72-98ea-66848b5d8a29.
+
+El propietario o administrador debe conceder los permisos mínimos de
+`docs/source_access.sql`. No se ejecutaron GRANT ni cambios de seguridad.
+Después, ejecutar el diagnóstico de solo lectura del notebook 05, comparar
+tickets con recibos/documentación y confirmar grano de Total/Tax/Total Discount.
+El parámetro real conserva `unconfirmed` para impedir suponer una definición.
+
+## Pendiente para cerrar la rúbrica
+
+Permiso y contrato de fuente; ejecución real y reconciliación con trabajo previo;
+copias de dashboards conectadas a Gold real; conclusiones basadas en resultados
+reales y presentación por el equipo. Los archivos locales aún deben guardarse
+en GitHub mediante commit/push revisado por el equipo.

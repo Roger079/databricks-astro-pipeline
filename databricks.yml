@@ -1,0 +1,42 @@
+bundle:
+  name: astro-taco-bueno
+include:
+  - resources/jobs/*.yml
+  - resources/pipelines/*.yml
+variables:
+  catalog:
+    default: workspace
+    description: Existing Unity Catalog catalog
+  schema:
+    default: astro_taco_dev
+  source_table:
+    default: workspace.default.tb_daily_tld_01_01_2026_m
+    description: catalog.schema.table with original Taco Bueno POS data
+  amount_grain:
+    default: unconfirmed
+    description: Confirm line or check with data owner
+workspace:
+  host: https://dbc-cfb7f93a-b497.cloud.databricks.com
+targets:
+  dev:
+    default: true
+    mode: development
+  demo:
+    mode: development
+    variables:
+      schema: astro_taco_demo
+      source_table: workspace.astro_taco_demo.demo_pos_source
+      amount_grain: check
+    resources:
+      jobs:
+        seed_demo:
+          name: Astro Taco Bueno synthetic demo seed
+          max_concurrent_runs: 1
+          tasks:
+            - task_key: seed
+              notebook_task:
+                notebook_path: notebooks/00_demo_source.py
+                base_parameters:
+                  catalog: ${var.catalog}
+                  schema: ${var.schema}
+              timeout_seconds: 1800

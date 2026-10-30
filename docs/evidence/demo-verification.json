@@ -1,0 +1,99 @@
+{
+  "captured_at": "2026-10-29T22:20:17.575980-06:00",
+  "data_kind": "synthetic_demo_only",
+  "real_source_status": "SELECT denied; business amount grain still unconfirmed",
+  "run_id": 1078180118409216,
+  "run_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/?o=7474644614542766#job/883217129446265/run/1078180118409216",
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "tasks": [
+    {
+      "task_key": "transform",
+      "run_id": 1008908614484260,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "validate",
+      "run_id": 673531735409947,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "analysis",
+      "run_id": 497306806166397,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    },
+    {
+      "task_key": "ingest",
+      "run_id": 936347571460845,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      }
+    }
+  ],
+  "reconciliation": {
+    "statement_id": "01f1d419-3318-1397-8c68-6cb0719f605c",
+    "rows": [
+      {
+        "source_rows": "8",
+        "silver_rows": "7",
+        "quarantine_rows": "1",
+        "published_checks": "2",
+        "review_checks": "3",
+        "reported_total": "18.0000",
+        "unmarked_demo_bronze_rows": "0",
+        "unmarked_demo_gold_rows": "0"
+      }
+    ]
+  },
+  "expectations": {
+    "statement_id": "01f1d419-359e-11d8-b4ae-f9d58dad7744",
+    "rows": [
+      {
+        "timestamp": "2026-10-30T04:18:15.988Z",
+        "update_id": "9c34730b-91db-46ff-95a2-bcae068fb286",
+        "flow_name": "workspace.astro_taco_demo.silver_pos",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_demo.silver_pos\",\"passed_records\":7,\"failed_records\":0},{\"name\":\"valid_key\",\"dataset\":\"workspace.astro_taco_demo.silver_pos\",\"passed_records\":7,\"failed_records\":0}]"
+      },
+      {
+        "timestamp": "2026-10-30T04:17:28.564Z",
+        "update_id": "9c34730b-91db-46ff-95a2-bcae068fb286",
+        "flow_name": "workspace.astro_taco_demo.silver_pos_typed",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_demo.silver_pos_typed\",\"passed_records\":8,\"failed_records\":0},{\"name\":\"valid_date\",\"dataset\":\"workspace.astro_taco_demo.silver_pos_typed\",\"passed_records\":7,\"failed_records\":1}]"
+      },
+      {
+        "timestamp": "2026-10-30T04:14:22.555Z",
+        "update_id": "e21efd2b-06aa-4100-91b1-0cfbb5d459ce",
+        "flow_name": "workspace.astro_taco_demo.silver_pos",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_demo.silver_pos\",\"passed_records\":7,\"failed_records\":0},{\"name\":\"valid_key\",\"dataset\":\"workspace.astro_taco_demo.silver_pos\",\"passed_records\":7,\"failed_records\":0}]"
+      },
+      {
+        "timestamp": "2026-10-30T04:14:09.126Z",
+        "update_id": "e21efd2b-06aa-4100-91b1-0cfbb5d459ce",
+        "flow_name": "workspace.astro_taco_demo.silver_pos_typed",
+        "expectations": "[{\"name\":\"valid_total\",\"dataset\":\"workspace.astro_taco_demo.silver_pos_typed\",\"passed_records\":8,\"failed_records\":0},{\"name\":\"valid_date\",\"dataset\":\"workspace.astro_taco_demo.silver_pos_typed\",\"passed_records\":7,\"failed_records\":1}]"
+      }
+    ]
+  }
+}
