@@ -1,0 +1,137 @@
+{
+  "version": 2,
+  "config": {
+    "sample_questions": [
+      {
+        "id": "234b646865b95741a3c8001b362080b2",
+        "question": [
+          "What are the primary business KPIs?"
+        ]
+      },
+      {
+        "id": "6fd66711d4c553fd95098270b52b342a",
+        "question": [
+          "What is publication coverage?"
+        ]
+      },
+      {
+        "id": "8a6ce2080158576cb2fcd957d040f105",
+        "question": [
+          "Compare discounted and non-discounted baskets without claiming lift"
+        ]
+      },
+      {
+        "id": "fb2b0de44a805fa7a25090eb32a582d3",
+        "question": [
+          "How many checks were withheld and why?"
+        ]
+      }
+    ]
+  },
+  "data_sources": {
+    "tables": [
+      {
+        "identifier": "workspace.astro_taco_main_real.gold_channel_hourly",
+        "description": [
+          "Published store/date/hour/channel facts. Source channels require interpretation."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.gold_daily_sales",
+        "description": [
+          "Published store-day ticket counts and normalized amounts. Primary executive KPI source; weight averages."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.gold_hourly_sales",
+        "description": [
+          "Published store/date/POS-hour demand and normalized amounts; not a seasonality model."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.gold_menu_performance",
+        "description": [
+          "Published store-day category/item units and source item discounts. No product revenue; bundle components present."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.gold_publication_coverage",
+        "description": [
+          "Store-day identifiable and published ticket counts; financial exception and repeated-row flags may overlap."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.gold_quality_summary",
+        "description": [
+          "Whole source snapshot ROW quality; no date/store grain. Unaffected by store/date filters."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.silver_checks",
+        "description": [
+          "One publishable check per composite store/date/check/is_demo key. Normalized customer and merchandise amounts."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.silver_checks_profile",
+        "description": [
+          "All identifiable checks before publication, with is_publishable and financial profile. Use for reconciliation only."
+        ]
+      },
+      {
+        "identifier": "workspace.astro_taco_main_real.silver_checks_review",
+        "description": [
+          "One withheld check per composite key; reasons and residual. Never include withheld amounts in published KPIs."
+        ]
+      }
+    ]
+  },
+  "instructions": {
+    "text_instructions": [
+      {
+        "id": "8b3f96a5bd4e5687bd1657e2e30af4c5",
+        "content": [
+          "You are the Taco Bueno Pricing & Promotion Decision Lab analyst. Use only the attached validated real tables in workspace.astro_taco_main_real, always is_demo=false. Current scope is 2025-12-31 and 2026-01-01, 114 stores. Do not query raw historical tacos.pricing_data.pricing as if normalized or extrapolate the store-date financial mapping. Historical normalization remains pending.\nPrimary customer amount = SUM(customer_total); merchandise amount excluding tax after discount = SUM(merchandise_after_discount); tickets = SUM(transactions) in gold_daily_sales or COUNT(*) in silver_checks. Weighted average ticket = SUM(customer_total)/SUM(transactions), never AVG(average_ticket). Currency is unconfirmed: say source monetary units, not USD. These POS amounts are not audited net revenue or settled payment proof. reported_total has mixed financial definitions and must never be the primary revenue measure.\nUse one fact table for each metric. Never join daily, hourly, menu or channel facts at raw grain. If necessary aggregate separately to common store/date grain before joining. Ticket identity is store_id + business_date + check_number + is_demo; check_number alone is not unique. silver_checks includes only publishable checks; silver_checks_profile includes all identifiable checks; silver_checks_review contains withheld exceptions. Their flags may overlap. Do not sum overlapping review reasons. Preserve legitimate repeated items. Keep source rows, structural quarantined rows, tickets and financial review tickets separate.\nDiscounted cohort means reported_discount > 0 at check grain, not a campaign redemption. Ticket discount depth = SUM(reported_discount)/SUM(merchandise_after_discount+reported_discount). A difference between discounted and non-discounted checks is descriptive, not causal lift. Do not allocate ticket totals or discounts to products arbitrarily. gold_menu_performance supports units, not product revenue; reported_line_total is deliberately NULL. Components may overlap within bundles; void and promo adjustments contribute zero units. No profit, margin, ROI, loyalty or retention without missing inputs.\nNo proven seasonality, promotion lift, cannibalization or keep/kill/return decisions from two holiday days. When asked which promotions should live/die/return, explain missing campaign identity, baseline and history; suggest a controlled test or investigation and give measurable evidence and next step. Do not invent campaign names. Evidence labels: descriptive, estimated association, comparison-supported estimate, insufficient evidence. No causal badge without a design supporting it.\nDefault answers explain observation window, filters, sample count, metric definition, evidence strength and limitation concisely. gold_quality_summary is a whole-snapshot fact with no date/store dimensions; do not pretend date/store filters apply. Source loaded_at is ingestion time, not a sales date. Duration is POS-reported; do not assume timezone or treat overnight duration assumptions as confirmed."
+        ]
+      }
+    ],
+    "example_question_sqls": [
+      {
+        "id": "14ed3a0da138590d93b39217873a693d",
+        "question": [
+          "Compare discounted and non-discounted baskets without claiming lift"
+        ],
+        "sql": [
+          "SELECT\n CASE WHEN reported_discount>0 THEN 'Ticket discount present' ELSE 'No ticket discount' END cohort,\n count(*) tickets, avg(customer_total) average_customer_amount,\n avg(merchandise_after_discount) average_merchandise_amount, sum(reported_discount) ticket_discounts\n FROM workspace.astro_taco_main_real.silver_checks WHERE is_demo=false GROUP BY 1"
+        ]
+      },
+      {
+        "id": "2e85d6518b5154879a61c8790add2215",
+        "question": [
+          "What are the primary business KPIs?"
+        ],
+        "sql": [
+          "SELECT min(business_date) first_date, max(business_date) last_date,\n count(DISTINCT store_id) stores, sum(transactions) published_tickets,\n sum(customer_total) customer_amount, sum(merchandise_after_discount) merchandise_amount,\n sum(customer_total)/nullif(sum(transactions),0) weighted_average_ticket\n FROM workspace.astro_taco_main_real.gold_daily_sales WHERE is_demo=false"
+        ]
+      },
+      {
+        "id": "c4c769ccb62351a88265e9db317f7531",
+        "question": [
+          "What is publication coverage?"
+        ],
+        "sql": [
+          "SELECT sum(identifiable_checks) identifiable_checks,\n sum(published_checks) published_checks, sum(published_checks)*1.0/nullif(sum(identifiable_checks),0) coverage_ratio\n FROM workspace.astro_taco_main_real.gold_publication_coverage WHERE is_demo=false"
+        ]
+      },
+      {
+        "id": "c988e010e2f256bd9f93324297145b7d",
+        "question": [
+          "How many checks were withheld and why?"
+        ],
+        "sql": [
+          "SELECT review_reason, count(*) review_checks\n FROM workspace.astro_taco_main_real.silver_checks_review WHERE is_demo=false GROUP BY review_reason ORDER BY review_checks DESC"
+        ]
+      }
+    ]
+  }
+}

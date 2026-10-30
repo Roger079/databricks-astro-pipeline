@@ -27,6 +27,13 @@ integrado en `main` con un merge. Su demo original y evidencia se conservan.
 Las correcciones de main se prueban en `workspace.astro_taco_main_demo`, separado
 de `workspace.astro_taco_demo` y de las tablas reales del equipo.
 Consultar [evidencia](docs/execution_evidence.md) y [pendientes](docs/delivery_checklist.md).
+
+Dashboard real AI/BI y espacio Genie conectados: seis páginas de indicadores,
+descuentos, demanda, mezcla de menú, decisiones y confianza del pipeline.
+Ver [configuración y verificación](docs/promotion_dashboard_setup.md),
+[prompt para Genie Code](docs/genie_dashboard_prompt.md) y
+[enlaces y evidencia API/SQL](docs/evidence/promotion-bi-deployment.json).
+El análisis histórico de lift, estacionalidad y canibalización sigue pendiente.
 `dev` usa `amount_grain=check`, verificado en los 40,306 tickets reales.
 Los perfiles financieros por tienda son inferidos, versionados y comprobados por ecuaciones; ver [análisis](docs/financial_definition_analysis.md).
 

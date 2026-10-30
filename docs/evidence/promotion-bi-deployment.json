@@ -1,0 +1,808 @@
+{
+  "sql_validation": {
+    "daily": {
+      "statement_id": "01f1d42e-ecbd-148c-9c29-b67fcce5722e",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2025-12-31",
+          "store_id": "5767",
+          "is_demo": "false",
+          "transactions": "150",
+          "reported_total": "2075.9700",
+          "reported_tax": "160.6500",
+          "reported_discount": "6.1300",
+          "customer_total": "2075.9700",
+          "merchandise_after_discount": "1915.3200",
+          "average_ticket": "13.83980000",
+          "average_duration_seconds": "194.6938775510204",
+          "duration_observations": "147",
+          "duration_seconds_sum": "28620.000000000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8509",
+          "is_demo": "false",
+          "transactions": "166",
+          "reported_total": "2324.2600",
+          "reported_tax": "186.4500",
+          "reported_discount": "61.6000",
+          "customer_total": "2449.1100",
+          "merchandise_after_discount": "2262.6600",
+          "average_ticket": "14.75367470",
+          "average_duration_seconds": "124.6987951807229",
+          "duration_observations": "166",
+          "duration_seconds_sum": "20700.000000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6252",
+          "is_demo": "false",
+          "transactions": "178",
+          "reported_total": "2410.8800",
+          "reported_tax": "196.5200",
+          "reported_discount": "26.1700",
+          "customer_total": "2581.2300",
+          "merchandise_after_discount": "2384.7100",
+          "average_ticket": "14.50129213",
+          "average_duration_seconds": "114.2372881355932",
+          "duration_observations": "177",
+          "duration_seconds_sum": "20220.000000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6728",
+          "is_demo": "false",
+          "transactions": "133",
+          "reported_total": "2053.8400",
+          "reported_tax": "143.2300",
+          "reported_discount": "61.7500",
+          "customer_total": "2053.8400",
+          "merchandise_after_discount": "1910.6100",
+          "average_ticket": "15.44240602",
+          "average_duration_seconds": "150.2362204724409",
+          "duration_observations": "127",
+          "duration_seconds_sum": "19080.000000000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "9788",
+          "is_demo": "false",
+          "transactions": "154",
+          "reported_total": "2561.6000",
+          "reported_tax": "210.9700",
+          "reported_discount": "4.1900",
+          "customer_total": "2768.3800",
+          "merchandise_after_discount": "2557.4100",
+          "average_ticket": "17.97649351",
+          "average_duration_seconds": "121.5584415584416",
+          "duration_observations": "154",
+          "duration_seconds_sum": "18720.000000000"
+        }
+      ]
+    },
+    "hourly": {
+      "statement_id": "01f1d42e-ed3c-1ef8-8a62-c4255a7e684d",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2025-12-31",
+          "weekday_sunday_1": "4",
+          "start_hour": "9",
+          "store_id": "9415",
+          "is_demo": "false",
+          "transactions": "1",
+          "reported_total": "8.4500",
+          "customer_total": "9.1500",
+          "merchandise_after_discount": "8.4500"
+        },
+        {
+          "business_date": "2026-01-01",
+          "weekday_sunday_1": "5",
+          "start_hour": "21",
+          "store_id": "5094",
+          "is_demo": "false",
+          "transactions": "1",
+          "reported_total": "0.0000",
+          "customer_total": "0.0000",
+          "merchandise_after_discount": "0.0000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "weekday_sunday_1": "4",
+          "start_hour": "20",
+          "store_id": "9467",
+          "is_demo": "false",
+          "transactions": "2",
+          "reported_total": "34.5800",
+          "customer_total": "37.4300",
+          "merchandise_after_discount": "34.5800"
+        },
+        {
+          "business_date": "2026-01-01",
+          "weekday_sunday_1": "5",
+          "start_hour": "9",
+          "store_id": "6728",
+          "is_demo": "false",
+          "transactions": "2",
+          "reported_total": "13.4000",
+          "customer_total": "13.4000",
+          "merchandise_after_discount": "12.3800"
+        },
+        {
+          "business_date": "2025-12-31",
+          "weekday_sunday_1": "4",
+          "start_hour": "9",
+          "store_id": "6763",
+          "is_demo": "false",
+          "transactions": "1",
+          "reported_total": "13.7200",
+          "customer_total": "13.7200",
+          "merchandise_after_discount": "12.6700"
+        }
+      ]
+    },
+    "channels": {
+      "statement_id": "01f1d42e-edbb-1276-a920-91c0f654c981",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6143",
+          "start_hour": "13",
+          "channel": "3",
+          "is_demo": "false",
+          "transactions": "1",
+          "reported_total": "11.8500",
+          "customer_total": "12.8300",
+          "merchandise_after_discount": "11.8500"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "9729",
+          "start_hour": "16",
+          "channel": "Dine-In",
+          "is_demo": "false",
+          "transactions": "1",
+          "reported_total": "20.2100",
+          "customer_total": "20.2100",
+          "merchandise_after_discount": "18.6700"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8509",
+          "start_hour": "10",
+          "channel": "To Go",
+          "is_demo": "false",
+          "transactions": "8",
+          "reported_total": "100.9800",
+          "customer_total": "109.3100",
+          "merchandise_after_discount": "100.9800"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "7006",
+          "start_hour": "10",
+          "channel": "To Go",
+          "is_demo": "false",
+          "transactions": "10",
+          "reported_total": "132.7500",
+          "customer_total": "143.5100",
+          "merchandise_after_discount": "132.7500"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "9392",
+          "start_hour": "19",
+          "channel": "Drive Thru",
+          "is_demo": "false",
+          "transactions": "7",
+          "reported_total": "78.8500",
+          "customer_total": "78.8500",
+          "merchandise_after_discount": "72.9600"
+        }
+      ]
+    },
+    "menu": {
+      "statement_id": "01f1d42e-ee3c-1a75-b776-ff863fed5c4c",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2025-12-31",
+          "store_id": "9415",
+          "report_group": "(M) LTO/Promo",
+          "menu_item": "Brisket Taco",
+          "is_demo": "false",
+          "units": "0.0000",
+          "line_count": "3",
+          "reported_line_total": null,
+          "item_discount": "0.0000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6907",
+          "report_group": "(M) Other",
+          "menu_item": "Tip",
+          "is_demo": "false",
+          "units": "1.0000",
+          "line_count": "1",
+          "reported_line_total": null,
+          "item_discount": "0.0000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8716",
+          "report_group": "(M) Burritos",
+          "menu_item": "Chicken BOB",
+          "is_demo": "false",
+          "units": "1.0000",
+          "line_count": "1",
+          "reported_line_total": null,
+          "item_discount": "0.0000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8241",
+          "report_group": "(M) LTO/Promo",
+          "menu_item": "Tamale Platter",
+          "is_demo": "false",
+          "units": "1.0000",
+          "line_count": "1",
+          "reported_line_total": null,
+          "item_discount": "0.0000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "6805",
+          "report_group": "(M) Sides",
+          "menu_item": "Firehouse Salsa (NR)",
+          "is_demo": "false",
+          "units": "1.0000",
+          "line_count": "1",
+          "reported_line_total": null,
+          "item_discount": "0.0000"
+        }
+      ]
+    },
+    "coverage": {
+      "statement_id": "01f1d42e-eeb6-1af1-9d4b-086071a922fa",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2025-12-31",
+          "store_id": "5767",
+          "is_demo": "false",
+          "identifiable_checks": "150",
+          "published_checks": "150",
+          "equation_exception_checks": "0",
+          "unknown_profile_checks": "0",
+          "checks_with_repeated_rows": "107"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8509",
+          "is_demo": "false",
+          "identifiable_checks": "166",
+          "published_checks": "166",
+          "equation_exception_checks": "0",
+          "unknown_profile_checks": "0",
+          "checks_with_repeated_rows": "48"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6252",
+          "is_demo": "false",
+          "identifiable_checks": "178",
+          "published_checks": "178",
+          "equation_exception_checks": "0",
+          "unknown_profile_checks": "0",
+          "checks_with_repeated_rows": "41"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6728",
+          "is_demo": "false",
+          "identifiable_checks": "133",
+          "published_checks": "133",
+          "equation_exception_checks": "0",
+          "unknown_profile_checks": "0",
+          "checks_with_repeated_rows": "84"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "9788",
+          "is_demo": "false",
+          "identifiable_checks": "154",
+          "published_checks": "154",
+          "equation_exception_checks": "0",
+          "unknown_profile_checks": "0",
+          "checks_with_repeated_rows": "43"
+        }
+      ]
+    },
+    "quality": {
+      "statement_id": "01f1d42e-ef3c-1710-9e3b-bc1fce5207c7",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "source_table": "workspace.default.tb_daily_tld_01_01_2026_m",
+          "is_demo": "false",
+          "amount_grain": "check",
+          "source_rows": "284428",
+          "quarantined_rows": "0",
+          "financial_review_rows": "8",
+          "duplicate_candidate_rows": "132085",
+          "unknown_category_rows": "741",
+          "unknown_payment_rows": "284428",
+          "missing_menu_item_rows": "741",
+          "missing_duration_rows": "20804",
+          "invalid_duration_rows": "20804",
+          "assumed_overnight_rows": "23",
+          "unknown_channel_rows": "0",
+          "loaded_at": "2026-10-30T06:17:45.101Z"
+        }
+      ]
+    },
+    "tickets": {
+      "statement_id": "01f1d42e-efc2-1bd0-8643-2b06c598b753",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2026-01-01",
+          "store_id": "5520",
+          "check_number": "96873125777487",
+          "channel": "Carry Out",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "11.9800",
+          "merchandise_after_discount": "11.0700",
+          "reported_discount": "0.0000",
+          "reported_tax": "0.9100",
+          "discount_cohort": "No ticket discount"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "7577",
+          "check_number": "96598247872702",
+          "channel": "Drive Thru",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "18.7900",
+          "merchandise_after_discount": "17.3600",
+          "reported_discount": "0.0000",
+          "reported_tax": "1.4300",
+          "discount_cohort": "No ticket discount"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "7277",
+          "check_number": "98384954265652",
+          "channel": "Dine-In",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "10.2700",
+          "merchandise_after_discount": "9.4900",
+          "reported_discount": "0.0000",
+          "reported_tax": "0.7800",
+          "discount_cohort": "No ticket discount"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "9050",
+          "check_number": "101305532024880",
+          "channel": "Dine-In",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "10.2700",
+          "merchandise_after_discount": "9.4900",
+          "reported_discount": "0.0000",
+          "reported_tax": "0.7800",
+          "discount_cohort": "No ticket discount"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8286",
+          "check_number": "97491598972960",
+          "channel": "Drive Thru",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "19.5400",
+          "merchandise_after_discount": "18.0500",
+          "reported_discount": "0.0000",
+          "reported_tax": "1.4900",
+          "discount_cohort": "No ticket discount"
+        }
+      ]
+    },
+    "reviews": {
+      "statement_id": "01f1d42e-f048-12f2-87d9-b3e37b9ea2d1",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2025-12-31",
+          "store_id": "9931",
+          "check_number": "178245",
+          "financial_profile": "B_PRE_DISCOUNT",
+          "review_reason": "zero_source_total_positive_tax",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "9041",
+          "check_number": "101271172290641",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "review_reason": "accounting_equation_mismatch",
+          "reconciliation_residual": "-0.690000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "7169",
+          "check_number": "366832",
+          "financial_profile": "B_PRE_DISCOUNT",
+          "review_reason": "accounting_equation_mismatch; zero_source_total_positive_tax",
+          "reconciliation_residual": "-29.980000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6905",
+          "check_number": "97148003686525",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "review_reason": "accounting_equation_mismatch",
+          "reconciliation_residual": "-0.990000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "7020",
+          "check_number": "236545",
+          "financial_profile": "B_PRE_DISCOUNT",
+          "review_reason": "accounting_equation_mismatch; zero_source_total_positive_tax",
+          "reconciliation_residual": "-6.980000"
+        }
+      ]
+    },
+    "profiles": {
+      "statement_id": "01f1d42e-f0d5-160e-b4c2-90aad3654901",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "business_date": "2026-01-01",
+          "store_id": "5520",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "7577",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "7277",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "9050",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "8286",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        }
+      ]
+    },
+    "snapshot": {
+      "statement_id": "01f1d42e-f158-10a9-ba14-d2e6b0258f91",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "source_table": "workspace.default.tb_daily_tld_01_01_2026_m",
+          "delta_version": "1",
+          "loaded_at": "2026-10-30T06:17:45.101Z",
+          "source_rows": "284428"
+        }
+      ]
+    },
+    "decisions": {
+      "statement_id": "01f1d42e-f1d4-1c11-9168-0ec4da9c1097",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "action": "Investigate",
+          "topic": "Financial exceptions",
+          "evidence": "49 checks withheld; 40257 published",
+          "confidence": "Descriptive / reconciled",
+          "next_step": "Review exception reasons and source records before expanding financial reporting.",
+          "limitation": "No estimate of withheld sales"
+        },
+        {
+          "action": "Design a test",
+          "topic": "Discount effectiveness",
+          "evidence": "2576 published checks with positive ticket discount",
+          "confidence": "Descriptive; selection bias remains",
+          "next_step": "Identify an offer and compare equivalent stores, baskets and time windows; plan a controlled test.",
+          "limitation": "Discount cohort differences are not causal promotion lift"
+        },
+        {
+          "action": "Prepare history",
+          "topic": "Lift and seasonality",
+          "evidence": "2 observed days across 114 stores",
+          "confidence": "Insufficient evidence",
+          "next_step": "Normalize historical source by store and period; verify missing days and a comparable baseline.",
+          "limitation": "Two holiday dates do not establish seasonal demand"
+        },
+        {
+          "action": "Investigate",
+          "topic": "Menu mix and substitution",
+          "evidence": "Published item and category units are available",
+          "confidence": "Descriptive only",
+          "next_step": "Confirm offer fingerprints, substitute sets and bundle components before comparing category change.",
+          "limitation": "Product revenue, causal cannibalization and margin are unavailable"
+        },
+        {
+          "action": "Defer keep / stop / return",
+          "topic": "Promotion portfolio",
+          "evidence": "No confirmed campaign IDs, schedule or costs",
+          "confidence": "Insufficient evidence",
+          "next_step": "Validate offer identity and baseline before issuing portfolio recommendations.",
+          "limitation": "No ROI, profit, retention or causal claims"
+        }
+      ]
+    },
+    "w_2": {
+      "title": "Customer amount incl. tax",
+      "statement_id": "01f1d42e-f258-1c2a-9c2d-9ca4ed389a22",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "615846.6800"
+        }
+      ]
+    },
+    "w_3": {
+      "title": "Merchandise amount excl. tax",
+      "statement_id": "01f1d42e-f2da-11d4-ad4a-ce3dee1737fb",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "571874.1600"
+        }
+      ]
+    },
+    "w_4": {
+      "title": "Published tickets",
+      "statement_id": "01f1d42e-f357-1e3b-8da2-77835690afa7",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "40257"
+        }
+      ]
+    },
+    "w_5": {
+      "title": "Weighted average ticket",
+      "statement_id": "01f1d42e-f3da-1994-8a58-177396b47d8c",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "15.297878"
+        }
+      ]
+    },
+    "w_10": {
+      "title": "Share of tickets with a positive ticket discount",
+      "statement_id": "01f1d42e-f5e7-1570-8090-453686e2fca4",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "0.06399"
+        }
+      ]
+    },
+    "w_11": {
+      "title": "Ticket discount depth",
+      "statement_id": "01f1d42e-f667-140c-8d14-6ee817713cf4",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "0.01613378"
+        }
+      ]
+    },
+    "w_12": {
+      "title": "Reported ticket discounts — once per check",
+      "statement_id": "01f1d42e-f70d-1c13-890c-1484ee012674",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "9377.7900"
+        }
+      ]
+    },
+    "w_26": {
+      "title": "Published / identifiable checks",
+      "statement_id": "01f1d42e-fbf3-10ce-93c7-15e89af74047",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "0.9987843001042028"
+        }
+      ]
+    },
+    "w_27": {
+      "title": "Financial review checks",
+      "statement_id": "01f1d42e-fc70-1971-babb-32e08f7a8d45",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "49"
+        }
+      ]
+    },
+    "w_28": {
+      "title": "Equation exception checks (overlapping review reason)",
+      "statement_id": "01f1d42e-fcf8-146c-9ff1-97ebf1b32559",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "value": "39"
+        }
+      ]
+    }
+  },
+  "validated_widget_count": 24,
+  "captured_at_utc": "2026-10-30T06:56:12.823258+00:00",
+  "genie_space_id": "01f1d42ecb0a156c8ba220f1312dc57c",
+  "dashboard_id": "01f1d42ecb9314b996d9c68d88de031e",
+  "dashboards_permissions": {
+    "object_id": "/dashboards/3564662666942856",
+    "object_type": "dashboard",
+    "access_control_list": [
+      {
+        "user_name": "a00842807@tec.mx",
+        "display_name": "a00842807@tec.mx",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": false
+          }
+        ]
+      },
+      {
+        "user_name": "a01381456@tec.mx",
+        "display_name": "a01381456@tec.mx",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": false
+          }
+        ]
+      },
+      {
+        "user_name": "a01236573@tec.mx",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": false
+          },
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": true,
+            "inherited_from_object": [
+              "/directories/3297927236256336"
+            ]
+          }
+        ]
+      },
+      {
+        "group_name": "admins",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": true,
+            "inherited_from_object": [
+              "/directories/"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "genie_permissions": {
+    "object_id": "/genie/3564662666942855",
+    "object_type": "genie",
+    "access_control_list": [
+      {
+        "user_name": "a00842807@tec.mx",
+        "display_name": "a00842807@tec.mx",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": false
+          }
+        ]
+      },
+      {
+        "user_name": "a01381456@tec.mx",
+        "display_name": "a01381456@tec.mx",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": false
+          }
+        ]
+      },
+      {
+        "user_name": "a01236573@tec.mx",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": false
+          },
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": true,
+            "inherited_from_object": [
+              "/directories/3297927236256336"
+            ]
+          }
+        ]
+      },
+      {
+        "group_name": "admins",
+        "all_permissions": [
+          {
+            "permission_level": "CAN_MANAGE",
+            "inherited": true,
+            "inherited_from_object": [
+              "/directories/"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "published": {
+    "display_name": "Taco Bueno | Pricing & Promotion Decision Lab",
+    "warehouse_id": "2b3b47b4d4cf4f3d",
+    "embed_credentials": false,
+    "revision_create_time": "2026-10-30T06:56:17.851Z"
+  },
+  "warehouse_id": "2b3b47b4d4cf4f3d",
+  "data_schema": "workspace.astro_taco_main_real",
+  "dashboard_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/dashboardsv3/01f1d42ecb9314b996d9c68d88de031e/published?o=7474644614542766",
+  "dashboard_edit_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/dashboardsv3/01f1d42ecb9314b996d9c68d88de031e?o=7474644614542766",
+  "genie_url": "https://dbc-cfb7f93a-b497.cloud.databricks.com/genie/rooms/01f1d42ecb0a156c8ba220f1312dc57c?o=7474644614542766",
+  "genie_smoke_checks": [
+    {
+      "conversation_id": "01f1d42edea51eed91fa3b6db4f016cb",
+      "message_id": "01f1d42edeb71147a931d74350da8bef",
+      "content": "What are the primary business KPIs?",
+      "status": "COMPLETED",
+      "answer": "The primary business KPIs for the observation window from **2025-12-31 to 2026-01-01** across **114 stores** are:\n- **Total published tickets:** 40,257\n- **Total customer amount:** 615,846.68 source monetary units\n- **Total merchandise amount (after discount):** 571,874.16 source monetary units\n- **Weighted average ticket:** 15.30 source monetary units\n\nThese metrics are based on POS-reported sales and reflect the performance for the two-day period shown.",
+      "query_result": {
+        "first_date": "2025-12-31",
+        "last_date": "2026-01-01",
+        "stores": "114",
+        "published_tickets": "40257",
+        "customer_amount": "615846.6800",
+        "merchandise_amount": "571874.1600",
+        "weighted_average_ticket": "15.297878"
+      },
+      "statement_id": "01f1d42e-e24c-1ac1-9d87-cd8abd8bcc51"
+    },
+    {
+      "conversation_id": "01f1d42efea2132f85e56665c499b0a8",
+      "message_id": "01f1d42efeae1a53af444d5643a4271d",
+      "content": "Which promotions should we keep, stop, or bring back? Can these two days establish promotion lift, seasonality or cannibalization?",
+      "status": "COMPLETED",
+      "answer": "This question is not directly answerable with the available data. There is no campaign identity, baseline, or historical data in the provided tables to determine which promotions should be kept, stopped, or brought back, nor to establish promotion lift, seasonality, or cannibalization. Only descriptive comparisons of ticket discount presence can be made for the two holiday days; causal evidence requires a controlled test or further investigation."
+    }
+  ],
+  "visual_ui_verified": false
+}

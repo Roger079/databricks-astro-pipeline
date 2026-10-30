@@ -1,0 +1,2047 @@
+{
+  "datasets": [
+    {
+      "name": "daily",
+      "displayName": "Daily",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_daily_sales WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "hourly",
+      "displayName": "Hourly",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_hourly_sales WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "channels",
+      "displayName": "Channels",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_channel_hourly WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "menu",
+      "displayName": "Menu",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_menu_performance WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "coverage",
+      "displayName": "Coverage",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_publication_coverage WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "quality",
+      "displayName": "Quality",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_quality_summary WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "tickets",
+      "displayName": "Tickets",
+      "queryLines": [
+        "SELECT business_date, store_id, check_number, channel, financial_profile,\n",
+        " customer_total, merchandise_after_discount, reported_discount, reported_tax,\n",
+        " CASE WHEN reported_discount > 0 THEN 'Ticket discount present' ELSE 'No ticket discount' END discount_cohort\n",
+        " FROM workspace.astro_taco_main_real.silver_checks WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "reviews",
+      "displayName": "Reviews",
+      "queryLines": [
+        "SELECT business_date, store_id, check_number, financial_profile,\n",
+        " review_reason, reconciliation_residual FROM workspace.astro_taco_main_real.silver_checks_review WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "profiles",
+      "displayName": "Profiles",
+      "queryLines": [
+        "SELECT business_date, store_id, financial_profile, is_publishable,\n",
+        " reconciliation_residual FROM workspace.astro_taco_main_real.silver_checks_profile WHERE is_demo = false"
+      ]
+    },
+    {
+      "name": "snapshot",
+      "displayName": "Snapshot",
+      "queryLines": [
+        "SELECT _astro_source source_table, _astro_source_version delta_version,\n",
+        " min(_astro_loaded_at) loaded_at, count(*) source_rows\n",
+        " FROM workspace.astro_taco_main_real.bronze_pos WHERE _astro_demo = false\n",
+        " GROUP BY _astro_source, _astro_source_version"
+      ]
+    },
+    {
+      "name": "decisions",
+      "displayName": "Decisions",
+      "queryLines": [
+        "WITH c AS (\n",
+        " SELECT count(*) published_checks, count(DISTINCT business_date) observed_days,\n",
+        " count(DISTINCT store_id) observed_stores,\n",
+        " sum(CASE WHEN reported_discount > 0 THEN 1 ELSE 0 END) discounted_checks\n",
+        " FROM workspace.astro_taco_main_real.silver_checks WHERE is_demo = false),\n",
+        " r AS (SELECT count(*) review_checks FROM workspace.astro_taco_main_real.silver_checks_review WHERE is_demo = false)\n",
+        " SELECT 'Investigate' action, 'Financial exceptions' topic,\n",
+        " concat(CAST(review_checks AS STRING), ' checks withheld; ', CAST(published_checks AS STRING), ' published') evidence,\n",
+        " 'Descriptive / reconciled' confidence,\n",
+        " 'Review exception reasons and source records before expanding financial reporting.' next_step,\n",
+        " 'No estimate of withheld sales' limitation FROM c CROSS JOIN r\n",
+        " UNION ALL SELECT 'Design a test', 'Discount effectiveness',\n",
+        " concat(CAST(discounted_checks AS STRING), ' published checks with positive ticket discount'),\n",
+        " 'Descriptive; selection bias remains',\n",
+        " 'Identify an offer and compare equivalent stores, baskets and time windows; plan a controlled test.',\n",
+        " 'Discount cohort differences are not causal promotion lift' FROM c\n",
+        " UNION ALL SELECT 'Prepare history', 'Lift and seasonality',\n",
+        " concat(CAST(observed_days AS STRING), ' observed days across ', CAST(observed_stores AS STRING), ' stores'),\n",
+        " 'Insufficient evidence',\n",
+        " 'Normalize historical source by store and period; verify missing days and a comparable baseline.',\n",
+        " 'Two holiday dates do not establish seasonal demand' FROM c\n",
+        " UNION ALL SELECT 'Investigate', 'Menu mix and substitution',\n",
+        " 'Published item and category units are available', 'Descriptive only',\n",
+        " 'Confirm offer fingerprints, substitute sets and bundle components before comparing category change.',\n",
+        " 'Product revenue, causal cannibalization and margin are unavailable' FROM c\n",
+        " UNION ALL SELECT 'Defer keep / stop / return', 'Promotion portfolio',\n",
+        " 'No confirmed campaign IDs, schedule or costs', 'Insufficient evidence',\n",
+        " 'Validate offer identity and baseline before issuing portfolio recommendations.',\n",
+        " 'No ROI, profit, retention or causal claims' FROM c"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "overview",
+      "displayName": "1. Business overview",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "# 1. Business overview\n\nValidated real POS extract: **2025-12-31 and 2026-01-01**. Amounts are in source monetary units; currency is unconfirmed. Customer amount includes tax; merchandise amount excludes tax after ticket discount. These are reconciled POS amounts, not audited revenue. Use Ask Genie for questions; use Genie Code in Edit mode to refine the dashboard."
+              ]
+            },
+            "name": "w_1"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(customer_total)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Customer amount incl. tax"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_2"
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(merchandise_after_discount)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Merchandise amount excl. tax"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_3"
+          },
+          "position": {
+            "x": 3,
+            "y": 3,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(transactions)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Published tickets"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_4"
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(customer_total)/NULLIF(SUM(transactions),0)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Weighted average ticket"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_5"
+          },
+          "position": {
+            "x": 9,
+            "y": 3,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    },
+                    {
+                      "name": "customer_amount",
+                      "expression": "SUM(customer_total)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "frame": {
+                "showTitle": true,
+                "title": "Customer amount by observed date"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "business_date",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "customer_amount",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            },
+            "name": "w_6"
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "SUM(transactions)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "frame": {
+                "showTitle": true,
+                "title": "Tickets by observed date"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "business_date",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "tickets",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            },
+            "name": "w_7"
+          },
+          "position": {
+            "x": 6,
+            "y": 6,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "SUM(transactions)"
+                    },
+                    {
+                      "name": "customer_amount",
+                      "expression": "SUM(customer_total)"
+                    },
+                    {
+                      "name": "average_ticket",
+                      "expression": "SUM(customer_total)/NULLIF(SUM(transactions),0)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Store comparison — same two-day scope"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store Id"
+                  },
+                  {
+                    "fieldName": "tickets",
+                    "displayName": "Tickets"
+                  },
+                  {
+                    "fieldName": "customer_amount",
+                    "displayName": "Customer Amount"
+                  },
+                  {
+                    "fieldName": "average_ticket",
+                    "displayName": "Average Ticket"
+                  }
+                ]
+              }
+            },
+            "name": "w_8"
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": "pricing",
+      "displayName": "2. Pricing and discounts",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "# 2. Pricing and discounts\n\nCompare ticket discount cohorts descriptively. A difference in basket value is **not promotion lift**. Ticket discount depth = sum(ticket discount) / sum(merchandise after discount + ticket discount). This is a ticket-level source field, not a product allocation or validated campaign redemption."
+              ]
+            },
+            "name": "w_9"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "tickets",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "AVG(CASE WHEN reported_discount > 0 THEN 1.0 ELSE 0.0 END)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Share of tickets with a positive ticket discount"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_10"
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "tickets",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(reported_discount)/NULLIF(SUM(merchandise_after_discount+reported_discount),0)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Ticket discount depth"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_11"
+          },
+          "position": {
+            "x": 4,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "tickets",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(reported_discount)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Reported ticket discounts — once per check"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_12"
+          },
+          "position": {
+            "x": 8,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "tickets",
+                  "fields": [
+                    {
+                      "name": "discount_cohort",
+                      "expression": "`discount_cohort`"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "COUNT(*)"
+                    },
+                    {
+                      "name": "average_customer_amount",
+                      "expression": "AVG(customer_total)"
+                    },
+                    {
+                      "name": "average_merchandise_amount",
+                      "expression": "AVG(merchandise_after_discount)"
+                    },
+                    {
+                      "name": "ticket_discount",
+                      "expression": "SUM(reported_discount)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Discount cohorts — descriptive comparison"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "discount_cohort",
+                    "displayName": "Discount Cohort"
+                  },
+                  {
+                    "fieldName": "tickets",
+                    "displayName": "Tickets"
+                  },
+                  {
+                    "fieldName": "average_customer_amount",
+                    "displayName": "Average Customer Amount"
+                  },
+                  {
+                    "fieldName": "average_merchandise_amount",
+                    "displayName": "Average Merchandise Amount"
+                  },
+                  {
+                    "fieldName": "ticket_discount",
+                    "displayName": "Ticket Discount"
+                  }
+                ]
+              }
+            },
+            "name": "w_13"
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "**Price analysis gate:** unit-price normalization and comparable SKU identity must be validated before adding price distributions. Do not interpret bundle components, zero-price components, or Item Promo adjustments as standalone full-price products."
+              ]
+            },
+            "name": "w_14"
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "demand",
+      "displayName": "3. Demand and comparison readiness",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "# 3. Demand and comparison readiness\n\nObserved demand by POS-reported hour and channel. Dates straddle New Year; changes are descriptive. **Seasonality, expected demand, promotion lift and confidence intervals are unavailable until historical normalization and baseline validation.**"
+              ]
+            },
+            "name": "w_15"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "hourly",
+                  "fields": [
+                    {
+                      "name": "start_hour",
+                      "expression": "`start_hour`"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "SUM(transactions)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "frame": {
+                "showTitle": true,
+                "title": "Published tickets by POS hour"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "start_hour",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "tickets",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            },
+            "name": "w_16"
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 7,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "channels",
+                  "fields": [
+                    {
+                      "name": "channel",
+                      "expression": "`channel`"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "SUM(transactions)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "frame": {
+                "showTitle": true,
+                "title": "Published tickets by source channel"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "channel",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "tickets",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            },
+            "name": "w_17"
+          },
+          "position": {
+            "x": 7,
+            "y": 3,
+            "width": 5,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    },
+                    {
+                      "name": "stores",
+                      "expression": "COUNT(DISTINCT store_id)"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "SUM(transactions)"
+                    },
+                    {
+                      "name": "customer_amount",
+                      "expression": "SUM(customer_total)"
+                    },
+                    {
+                      "name": "average_ticket",
+                      "expression": "SUM(customer_total)/NULLIF(SUM(transactions),0)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Observed daily comparison"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business Date"
+                  },
+                  {
+                    "fieldName": "stores",
+                    "displayName": "Stores"
+                  },
+                  {
+                    "fieldName": "tickets",
+                    "displayName": "Tickets"
+                  },
+                  {
+                    "fieldName": "customer_amount",
+                    "displayName": "Customer Amount"
+                  },
+                  {
+                    "fieldName": "average_ticket",
+                    "displayName": "Average Ticket"
+                  }
+                ]
+              }
+            },
+            "name": "w_18"
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 12,
+            "height": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "mix",
+      "displayName": "4. Menu mix and substitution signals",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "# 4. Menu mix and substitution signals\n\nUnits from reconciled, published checks only. Reported item/component units can include bundle components; summing them is not a count of unique standalone products. Voided items and promo monetary adjustments contribute zero units. **No allocated product revenue or proven cannibalization.**"
+              ]
+            },
+            "name": "w_19"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "menu",
+                  "fields": [
+                    {
+                      "name": "report_group",
+                      "expression": "`report_group`"
+                    },
+                    {
+                      "name": "units",
+                      "expression": "SUM(units)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "frame": {
+                "showTitle": true,
+                "title": "Reported units by source category"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "report_group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "units",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            },
+            "name": "w_20"
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "menu",
+                  "fields": [
+                    {
+                      "name": "report_group",
+                      "expression": "`report_group`"
+                    },
+                    {
+                      "name": "menu_item",
+                      "expression": "`menu_item`"
+                    },
+                    {
+                      "name": "units",
+                      "expression": "SUM(units)"
+                    },
+                    {
+                      "name": "source_lines",
+                      "expression": "SUM(line_count)"
+                    },
+                    {
+                      "name": "item_discount_field",
+                      "expression": "SUM(item_discount)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Item and component detail — explore categories first"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "report_group",
+                    "displayName": "Report Group"
+                  },
+                  {
+                    "fieldName": "menu_item",
+                    "displayName": "Menu Item"
+                  },
+                  {
+                    "fieldName": "units",
+                    "displayName": "Units"
+                  },
+                  {
+                    "fieldName": "source_lines",
+                    "displayName": "Source Lines"
+                  },
+                  {
+                    "fieldName": "item_discount_field",
+                    "displayName": "Item Discount Field"
+                  }
+                ]
+              }
+            },
+            "name": "w_21"
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 7
+          }
+        }
+      ]
+    },
+    {
+      "name": "decisions",
+      "displayName": "5. Decisions and next experiments",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "# 5. Decisions and next experiments\n\nDatathon question: **Which promotions should live, die, or come back?** This board separates actions supported today from decisions needing more evidence. **Whole validated snapshot: date/store filters do not change this board.** No invented promotion names or keep/stop/return rankings."
+              ]
+            },
+            "name": "w_22"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "decisions",
+                  "fields": [
+                    {
+                      "name": "action",
+                      "expression": "`action`"
+                    },
+                    {
+                      "name": "topic",
+                      "expression": "`topic`"
+                    },
+                    {
+                      "name": "evidence",
+                      "expression": "`evidence`"
+                    },
+                    {
+                      "name": "confidence",
+                      "expression": "`confidence`"
+                    },
+                    {
+                      "name": "next_step",
+                      "expression": "`next_step`"
+                    },
+                    {
+                      "name": "limitation",
+                      "expression": "`limitation`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Evidence → decision → next step"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "action",
+                    "displayName": "Action"
+                  },
+                  {
+                    "fieldName": "topic",
+                    "displayName": "Topic"
+                  },
+                  {
+                    "fieldName": "evidence",
+                    "displayName": "Evidence"
+                  },
+                  {
+                    "fieldName": "confidence",
+                    "displayName": "Confidence"
+                  },
+                  {
+                    "fieldName": "next_step",
+                    "displayName": "Next Step"
+                  },
+                  {
+                    "fieldName": "limitation",
+                    "displayName": "Limitation"
+                  }
+                ]
+              }
+            },
+            "name": "w_23"
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 12,
+            "height": 9
+          }
+        },
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "**Release gate for promotion recommendations:** reliable offer identity; adequate observed sample; comparable stores and periods; validated baseline; target and substitute-category outcomes; sensitivity and uncertainty. When these fail, recommend an investigation or controlled test. Costs are required for margin/ROI."
+              ]
+            },
+            "name": "w_24"
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "trust",
+      "displayName": "6. Trust and pipeline evidence",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "# 6. Trust and pipeline evidence\n\nSource snapshot → Bronze → typed/classified Silver → reconciled tickets → Gold → validation. Financial profiles differ by store and are valid only for the mapped dates. Legitimate repeated item occurrences remain; financial exceptions are withheld. Row quarantine and ticket financial review are separate measures."
+              ]
+            },
+            "name": "w_25"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "coverage",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(published_checks)*1.0/NULLIF(SUM(identifiable_checks),0)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Published / identifiable checks"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_26"
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "reviews",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "COUNT(*)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Financial review checks"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_27"
+          },
+          "position": {
+            "x": 4,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "coverage",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "expression": "SUM(equation_exception_checks)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "frame": {
+                "showTitle": true,
+                "title": "Equation exception checks (overlapping review reason)"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "value",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "w_28"
+          },
+          "position": {
+            "x": 8,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "reviews",
+                  "fields": [
+                    {
+                      "name": "review_reason",
+                      "expression": "`review_reason`"
+                    },
+                    {
+                      "name": "tickets",
+                      "expression": "COUNT(*)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Review reasons — reasons can overlap"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "review_reason",
+                    "displayName": "Review Reason"
+                  },
+                  {
+                    "fieldName": "tickets",
+                    "displayName": "Tickets"
+                  }
+                ]
+              }
+            },
+            "name": "w_29"
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 7,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "profiles",
+                  "fields": [
+                    {
+                      "name": "financial_profile",
+                      "expression": "`financial_profile`"
+                    },
+                    {
+                      "name": "identifiable_checks",
+                      "expression": "COUNT(*)"
+                    },
+                    {
+                      "name": "published_checks",
+                      "expression": "SUM(CASE WHEN is_publishable THEN 1 ELSE 0 END)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Store-specific financial profiles"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "financial_profile",
+                    "displayName": "Financial Profile"
+                  },
+                  {
+                    "fieldName": "identifiable_checks",
+                    "displayName": "Identifiable Checks"
+                  },
+                  {
+                    "fieldName": "published_checks",
+                    "displayName": "Published Checks"
+                  }
+                ]
+              }
+            },
+            "name": "w_30"
+          },
+          "position": {
+            "x": 7,
+            "y": 6,
+            "width": 5,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "snapshot",
+                  "fields": [
+                    {
+                      "name": "source_table",
+                      "expression": "`source_table`"
+                    },
+                    {
+                      "name": "delta_version",
+                      "expression": "`delta_version`"
+                    },
+                    {
+                      "name": "loaded_at",
+                      "expression": "`loaded_at`"
+                    },
+                    {
+                      "name": "source_rows",
+                      "expression": "`source_rows`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Source provenance — whole snapshot, unfiltered"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "source_table",
+                    "displayName": "Source Table"
+                  },
+                  {
+                    "fieldName": "delta_version",
+                    "displayName": "Delta Version"
+                  },
+                  {
+                    "fieldName": "loaded_at",
+                    "displayName": "Loaded At"
+                  },
+                  {
+                    "fieldName": "source_rows",
+                    "displayName": "Source Rows"
+                  }
+                ]
+              }
+            },
+            "name": "w_31"
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 12,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quality",
+                  "fields": [
+                    {
+                      "name": "source_rows",
+                      "expression": "`source_rows`"
+                    },
+                    {
+                      "name": "quarantined_rows",
+                      "expression": "`quarantined_rows`"
+                    },
+                    {
+                      "name": "financial_review_rows",
+                      "expression": "`financial_review_rows`"
+                    },
+                    {
+                      "name": "duplicate_candidate_rows",
+                      "expression": "`duplicate_candidate_rows`"
+                    },
+                    {
+                      "name": "invalid_duration_rows",
+                      "expression": "`invalid_duration_rows`"
+                    },
+                    {
+                      "name": "assumed_overnight_rows",
+                      "expression": "`assumed_overnight_rows`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Structural row quality — whole snapshot, unfiltered"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "source_rows",
+                    "displayName": "Source Rows"
+                  },
+                  {
+                    "fieldName": "quarantined_rows",
+                    "displayName": "Quarantined Rows"
+                  },
+                  {
+                    "fieldName": "financial_review_rows",
+                    "displayName": "Financial Review Rows"
+                  },
+                  {
+                    "fieldName": "duplicate_candidate_rows",
+                    "displayName": "Duplicate Candidate Rows"
+                  },
+                  {
+                    "fieldName": "invalid_duration_rows",
+                    "displayName": "Invalid Duration Rows"
+                  },
+                  {
+                    "fieldName": "assumed_overnight_rows",
+                    "displayName": "Assumed Overnight Rows"
+                  }
+                ]
+              }
+            },
+            "name": "w_32"
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "[Successful real pipeline run](https://dbc-cfb7f93a-b497.cloud.databricks.com/jobs/621214800098362/runs/435278296555206?o=7474644614542766) | [Source and definitions](https://github.com/Roger079/databricks-astro-pipeline/blob/main/docs/data_contract.md). Profile A: customer amount = source Total; merchandise = Total − Tax. Profile B: customer amount = Total − ticket discount + Tax; merchandise = Total − ticket discount. Unknown store/date rules are withheld. The raw Total field mixes these meanings."
+              ]
+            },
+            "name": "w_33"
+          },
+          "position": {
+            "x": 0,
+            "y": 19,
+            "width": 12,
+            "height": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "daily_business_date",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "hourly_business_date",
+                "query": {
+                  "datasetName": "hourly",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "channels_business_date",
+                "query": {
+                  "datasetName": "channels",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "menu_business_date",
+                "query": {
+                  "datasetName": "menu",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "coverage_business_date",
+                "query": {
+                  "datasetName": "coverage",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "tickets_business_date",
+                "query": {
+                  "datasetName": "tickets",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "reviews_business_date",
+                "query": {
+                  "datasetName": "reviews",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "profiles_business_date",
+                "query": {
+                  "datasetName": "profiles",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "daily_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "hourly_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "channels_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "menu_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "coverage_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "tickets_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "reviews_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "profiles_business_date"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Business date — validated two days"
+              }
+            },
+            "name": "w_34"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "daily_store_id",
+                "query": {
+                  "datasetName": "daily",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "hourly_store_id",
+                "query": {
+                  "datasetName": "hourly",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "channels_store_id",
+                "query": {
+                  "datasetName": "channels",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "menu_store_id",
+                "query": {
+                  "datasetName": "menu",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "coverage_store_id",
+                "query": {
+                  "datasetName": "coverage",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "tickets_store_id",
+                "query": {
+                  "datasetName": "tickets",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "reviews_store_id",
+                "query": {
+                  "datasetName": "reviews",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "profiles_store_id",
+                "query": {
+                  "datasetName": "profiles",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "daily_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "hourly_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "channels_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "menu_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "coverage_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "tickets_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "reviews_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "profiles_store_id"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Store"
+              }
+            },
+            "name": "w_35"
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        }
+      ]
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FAF7F2",
+        "dark": "#202123"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#292B2E"
+      },
+      "fontColor": {
+        "light": "#292321",
+        "dark": "#F7F3EC"
+      },
+      "selectionColor": {
+        "light": "#C83830",
+        "dark": "#F38B79"
+      },
+      "visualizationColors": [
+        "#C83830",
+        "#E7A23B",
+        "#28877C",
+        "#506E95",
+        "#8D6593",
+        "#708350"
+      ],
+      "widgetHeaderAlignment": "LEFT"
+    },
+    "genieSpace": {
+      "isEnabled": true,
+      "overrideId": "01f1d42ecb0a156c8ba220f1312dc57c",
+      "enablementMode": "ENABLED"
+    }
+  }
+}

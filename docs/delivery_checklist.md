@@ -21,13 +21,19 @@
   impuesto 571,874.16. Son métricas analíticas inferidas, no ingresos auditados.
 - Evidencia API/SQL y expectations, falla de propiedad y recuperación, análisis
   real de cinco hallazgos y consultas reproducibles guardados en docs/validation.
+- Dashboard AI/BI real de seis páginas creado y publicado, con once datasets,
+  filtros de tienda/fecha y espacio Genie enlazado a nueve tablas validadas.
+  Veinticuatro consultas de widgets verificadas en el warehouse. Los tres
+  miembros tienen CAN_MANAGE en ambos recursos. Definiciones y prompt versionados;
+  ver promotion_dashboard_setup.md y evidence/promotion-bi-deployment.json.
 
 ## Pendientes de la entrega y del dashboard estratégico
 
 1. Ejecutar la prueba de cambio/borrado en una fuente sintética aislada. El rerun
    sin cambios ya se verificó con los dos días reales.
-2. Construir el dashboard real: filtros consistentes, métricas normalizadas,
-   cobertura y explicación de excepciones; exportar/versionar su definición.
+2. Comprobar visualmente el dashboard publicado, sus filtros y Ask Genie desde
+   la sesión de otro compañero. Refinar presentación con Genie Code si hace falta;
+   las verificaciones API/SQL no sustituyen una revisión del navegador.
 3. Alinear la estrategia con el reto Pricing & Promotion Analytics: perfilar la
    historia disponible, validar reglas financieras por tienda/periodo e investigar
    si pueden identificarse ofertas. Los dos días solos no permiten estacionalidad.
