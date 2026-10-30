@@ -1,169 +1,77 @@
-# Astro · Taco Bueno
+# Taco Bueno | Pricing & Promotion Analytics
 
-Demostración de ingesta y procesamiento de **dos días de datos POS reales**:
-31 de diciembre de 2025 y 1 de enero de 2026, desde
-`workspace.default.tb_daily_tld_01_01_2026_m`. No se requiere procesar la fuente
-histórica de 85 millones de filas para esta entrega.
+A Databricks analytics project that transforms restaurant point-of-sale data into reliable business metrics and a foundation for pricing and promotion decisions.
 
-El snapshot Bronze lee una tabla que ya existe en Databricks. Esto demuestra
-ingesta tabla-a-tabla del extracto real entregado al equipo. El job conserva
-la versión Delta leída y demuestra el recorrido reproducible hasta Gold.
+The project explores a central question: **Which promotions should continue, stop, or return?** It brings together reproducible data processing, financial reconciliation, an interactive dashboard, and natural-language analysis through Databricks Genie.
 
-## Objetivo comercial
+## From transactions to decisions
 
-Taco Bueno - Pricing & Promotion Analytics: investigar qué ofertas conviene
-mantener, reconsiderar o volver a probar. La ingesta real de dos días demuestra
-el pipeline; lift, estacionalidad y posible canibalización requieren ampliar el
-análisis a la historia disponible. Ver [plan del dashboard](docs/dashboard_plan.md).
-
-## Estado
-
-La ejecución real y su rerun ya pasaron: 284,428 filas, 40,257 tickets publicados
-y 49 en revisión, con iguales importes en ambas ejecuciones. Hay 28 pruebas
-locales. Ver [hallazgos](docs/findings.md) y evidencia normalizada.
-
-El trabajo original de Magda está preservado en `magda` (commit `4d2aef2`) y fue
-integrado en `main` con un merge. Su demo original y evidencia se conservan.
-Las correcciones de main se prueban en `workspace.astro_taco_main_demo`, separado
-de `workspace.astro_taco_demo` y de las tablas reales del equipo.
-Consultar [evidencia](docs/execution_evidence.md) y [pendientes](docs/delivery_checklist.md).
-
-Dashboard real AI/BI y espacio Genie conectados: seis páginas de indicadores,
-descuentos, demanda, mezcla de menú, decisiones y confianza del pipeline.
-Ver [configuración y verificación](docs/promotion_dashboard_setup.md),
-[prompt para Genie Code](docs/genie_dashboard_prompt.md) y
-[enlaces y evidencia API/SQL](docs/evidence/promotion-bi-deployment.json).
-El análisis histórico de lift, estacionalidad y canibalización sigue pendiente.
-`dev` usa `amount_grain=check`, verificado en los 40,306 tickets reales.
-Los perfiles financieros por tienda son inferidos, versionados y comprobados por ecuaciones; ver [análisis](docs/financial_definition_analysis.md).
-
-## Estructura requerida
+The pipeline organizes data into three layers:
 
 ```text
-databricks.yml
-resources/
-  jobs/daily_orchestration_job.yml
-  pipelines/lakeflow_pipeline.yml
-src/transformations/
-  silver/
-    mv_store_financial_profiles.py
-    mv_pos_typed.py
-    mv_pos_classified.py
-    mv_pos_checks.py
-  gold/
-    mv_store_daily.py
-    mv_channel_hourly.py
-    mv_item_daily.py
-    mv_data_quality.py
-notebooks/
-  00_demo_source.py
-  01_ingest.py
-  03_validate.py
-  04_analysis.py
-  05_source_diagnostics.py
-config/store_financial_profiles.json
-tests/test_pipeline.py
-dashboards/astro_demo.lvdash.json
-docs/
+POS source → Bronze snapshot → Silver validation and reconciliation → Gold analytics
+                                                                          ↓
+                                                                 AI/BI dashboard + Genie
 ```
 
-Orquestación en `resources`; lógica de tablas Silver/Gold en
-`src/transformations`, siguiendo la plantilla del reto. Los notebooks restantes
-son herramientas de ingesta, diagnóstico, validación y presentación.
+- **Bronze** preserves a versioned source snapshot and ingestion provenance.
+- **Silver** standardizes records, distinguishes sales from components and adjustments, and reconciles transactions using financial rules specific to each store and date.
+- **Gold** provides daily, hourly, store, channel, and menu-level analytics, alongside data-quality and publication-coverage metrics.
 
-## Flujo y reglas
+The workflow orchestrates ingestion, Lakeflow transformations, validation, and analysis. Reprocessing the same source snapshot has produced identical business counts and amounts.
 
-Fuente → snapshot Bronze → tipado/clasificación Silver → tickets y artículos →
-Gold diario, horario, canales, categorías y calidad → validación → análisis.
+## Validated dataset
 
-- Clave de ticket: tienda + fecha de negocio + número de cheque, pendiente de
-  confirmar si el POS requiere otra columna de identidad.
-- Total, Tax y Total Discount se cuentan una vez por ticket. Los perfiles A/B
-  se normalizan a `customer_total` y `merchandise_after_discount`; el Total fuente
-  no se interpreta como una definición uniforme de ventas entre tiendas.
-- Repeticiones idénticas se preservan y cuentan como candidatos. No se elimina
-  el artículo ni se excluye automáticamente el ticket. La fuente debe ser un
-  snapshot sin cargas duplicadas; si existen, resolverlas por procedencia/ID real.
-- Errores de tipos van a cuarentena. Descuentos, cantidades cero y ajustes Item Promo reconocidos se conservan; ecuaciones fallidas y estados ambiguos van a revisión.
-- Relojes invertidos no se convierten automáticamente en servicios de casi 24 h.
-  La ventana nocturna documentada permite un supuesto marcado; duraciones
-  inválidas no eliminan ventas y no entran en promedios.
-- Se publica cobertura de tickets para explicar las exclusiones del análisis.
+The current implementation processes a real POS extract covering **December 31, 2025, and January 1, 2026**.
 
-## Requisitos
+| Measure | Verified result |
+| --- | ---: |
+| Stores represented | 114 |
+| Source records | 284,428 |
+| Identifiable transactions | 40,306 |
+| Transactions published for analysis | 40,257 |
+| Transactions held for financial review | 49 |
+| Transaction publication coverage | 99.87843% |
+| Normalized customer amount, including tax | 615,846.68 |
+| Merchandise amount, after discounts and excluding tax | 571,874.16 |
 
-Unity Catalog, serverless Jobs y Lakeflow habilitados. CLI autenticada con perfil
-`datathon` o el perfil propio del equipo; no guardar tokens en Git. La identidad
-que ejecuta necesita leer la fuente y crear/administrar su esquema destino.
-La ingesta concede ALL PRIVILEGES y MANAGE a `team_principals` en el esquema
-proyecto; todos necesitan USE CATALOG en workspace (ya heredado por los usuarios).
+Amounts are expressed in source monetary units; the currency has not been confirmed. Financial definitions are inferred from the supplied data and checked through reconciliation. These metrics represent reconciled POS amounts rather than audited revenue.
 
-## Prueba sintética del código de main
+## Analytics experience
 
-```powershell
-databricks bundle validate -t demo -p datathon --strict
-databricks bundle deploy -t demo -p datathon
-databricks bundle run seed_demo -t demo -p datathon
-databricks bundle run daily_orchestration -t demo -p datathon
-```
+The AI/BI dashboard connects business performance with the evidence supporting it:
 
-Ejecutar secuencialmente. Esperado: **12 Bronze, 11 Silver, 1 cuarentena,
-5 tickets publicados, 2 en revisión, importe cliente normalizado 37.96 y mercancía
-después de descuentos 35**. El Total fuente suma 38.76 y se conserva para rastreo.
-La demo cubre ambos perfiles, artículos repetidos, descuentos, componentes de
-cantidad cero, promo negativa, anulación parcial, fecha inválida, perfil desconocido
-y una diferencia contable. No son ventas reales ni se mezclan con demos históricas.
+| Dashboard section | Purpose |
+| --- | --- |
+| Business overview | Compare transaction volume, normalized amounts, and average transaction value. |
+| Pricing and discounts | Examine discount frequency, discount depth, and basket differences. |
+| Demand | Explore activity by date, store, reported hour, and channel. |
+| What people order | Understand the distribution of item and category units. |
+| Decisions and experiments | Connect observations to recommended investigations, evidence strength, and next steps. |
+| Data trust | Inspect source provenance, financial exceptions, reconciliation, and coverage. |
 
-## Demostración con los dos días reales
+A connected Genie space supports natural-language questions over curated, validated tables using documented metric definitions.
 
-1. Revisar las reglas inferidas en docs/data_contract.md y los 114 perfiles
-   versionados en config/store_financial_profiles.json.
-2. El grano check ya se verificó en toda la fuente real. No necesita confirmación
-   externa; los tickets se publican solo si cumplen su ecuación y controles.
-3. Eliminar overrides locales antiguos `amount_grain=unconfirmed`, si existen.
-4. Validar, desplegar y ejecutar:
+## Data reliability
 
-```powershell
-databricks bundle validate -t dev -p datathon --strict
-databricks bundle deploy -t dev -p datathon
-databricks bundle run daily_orchestration -t dev -p datathon
-```
+Ticket-level totals, taxes, and discounts are counted once per transaction. Legitimate repeated item occurrences are preserved. Structurally invalid records and transactions requiring financial review follow separate paths, with exclusions made visible through coverage metrics.
 
-El destino es `workspace.astro_taco_main_real`; no se sobrescriben las tablas de
-`workspace.default`. El horario de las 06:00 sigue pausado. Un miembro designado
-debe administrar el despliegue compartido: desplegar desde otra identidad crea
-recursos diferentes y no debe apuntarlos simultáneamente al mismo esquema.
+Store-specific financial rules normalize differing source definitions into comparable customer and merchandise amounts. Product analysis reports units without assigning an entire transaction's value to every item. Bundle components and monetary adjustments require separate interpretation.
 
-## Verificación y presentación
+## Scope and interpretation
 
-```powershell
-python -m pip install -r requirements-test.txt
-python -m unittest discover -s tests -v
-```
+The two-day extract demonstrates ingestion, reconciliation, and descriptive analysis. It supports comparisons of demand, discounts, and ordering patterns within the observed window.
 
-Las pruebas DuckDB ejecutan el SQL real de los archivos; no sustituyen a Spark,
-Delta, Lakeflow ni a la validación con datos reales. El job comprueba conciliación
-de filas, unicidad de tickets, agregados diarios/horarios/canales y cobertura.
+Reliable promotion lift, seasonality, and cannibalization analysis require validated historical data, identifiable offers, and defensible comparison periods. Historical normalization and those strategic analyses remain future work. Profitability and return on investment also require cost data that is not available in the current dataset.
 
-Dos fechas permiten explicar el pipeline y comparar tiendas/categorías con
-cobertura explícita. No permiten afirmar tendencias mensuales, estacionalidad ni
-crecimiento interanual. Consultar docs/delivery_checklist.md para el estado de ejecución real, dashboard y conclusiones.
+## Technology
 
-Ver [arquitectura](docs/architecture.md), [diccionario](docs/data_dictionary.md),
-[contrato](docs/data_contract.md), [operación](docs/runbook.md) y
-[rúbrica](docs/rubric.md).
+Databricks · Delta Lake · Lakeflow · Python · SQL · AI/BI Dashboards · Genie
 
-## Evidencia de ejecución normalizada
+## Further reading
 
-Usar `python scripts/capture_run_evidence.py --run-id ID --pipeline-id ID --schema astro_taco_main_real --kind real`
-(o `--schema astro_taco_main_demo --kind demo`). Captura conciliación, perfiles,
-razones de revisión y expectations únicamente dentro de la ventana de ese run.
-Los archivos normalized-*-verification.json están separados de la evidencia histórica.
-
-## Aislamiento entre despliegues
-
-El destino real de main es workspace.astro_taco_main_real. El esquema
-workspace.astro_taco_dev pertenece al pipeline de Magda y no debe reutilizarse
-para este despliegue. La ingesta verifica pipelines.pipelineId antes de escribir
-Bronze; el job pasa expected_pipeline_id automáticamente. El modo manual debe
-proporcionar ese ID cuando ya existen tablas Silver/Gold.
+- [Architecture](docs/architecture.md)
+- [Data dictionary](docs/data_dictionary.md)
+- [Data contract and financial definitions](docs/data_contract.md)
+- [Analytical findings](docs/findings.md)
+- [Promotion analytics methodology](docs/dashboard_plan.md)
