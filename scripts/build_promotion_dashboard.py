@@ -16,7 +16,8 @@ def dataset(name, sql):
 
 for name, table in [('daily', 'gold_daily_sales'), ('hourly', 'gold_hourly_sales'),
                     ('channels', 'gold_channel_hourly'), ('menu', 'gold_menu_performance'),
-                    ('coverage', 'gold_publication_coverage'), ('quality', 'gold_quality_summary')]:
+                    ('coverage', 'gold_publication_coverage'), ('quality', 'gold_quality_summary'),
+                    ('menu_discount_scorecard', 'gold_menu_discount_scorecard')]:
     dataset(name, f'SELECT * FROM {DB}.{table} WHERE is_demo = false')
 dataset('tickets', f'''SELECT business_date, store_id, check_number, channel, financial_profile,
  customer_total, merchandise_after_discount, reported_discount, reported_tax,
@@ -186,7 +187,7 @@ for index, (field, kind, title) in enumerate([
     ('store_id', 'filter-multi-select', 'Store')]):
     queries = []
     encodings = []
-    for ds in ['daily', 'hourly', 'channels', 'menu', 'coverage', 'tickets', 'reviews', 'profiles']:
+    for ds in ['daily', 'hourly', 'channels', 'menu', 'coverage', 'tickets', 'reviews', 'profiles', 'menu_discount_scorecard']:
         name = f'{ds}_{field}'
         queries.append({'name': name, 'query': {'datasetName': ds,
             'fields': [{'name': field, 'expression': f'`{field}`'}], 'disaggregated': False}})
@@ -194,6 +195,14 @@ for index, (field, kind, title) in enumerate([
     place(filter_page, {'queries': queries, 'spec': {'version': 2, 'widgetType': kind,
           'encodings': {'fields': encodings}, 'frame': {'showTitle': True, 'title': title}}}, index*6, 0, 6, 2)
 pages.append(filter_page)
+
+menu_page = next(page for page in pages if page['name'] == 'mix')
+text(menu_page, '## Menu and discount scorecard\nFilter to one store and date. Compare how many of every 100 tickets contained each item in each discount group. A positive gap means the item appeared more often in discounted baskets. Read the ticket counts alongside the gap. A blank rate means that group had no tickets.', 0, 15, 12, 3)
+scorecard_fields = ['store_id', 'business_date', 'report_group', 'menu_item', 'discounted_per_100',
+                    'zero_discount_per_100', 'gap_percentage_points', 'discounted_with_item',
+                    'discounted_tickets', 'zero_discount_with_item', 'zero_discount_tickets']
+viz(menu_page, 'menu_discount_scorecard', 'Item frequency by ticket discount status',
+    {field: f'`{field}`' for field in scorecard_fields}, 'table', 0, 18, 12, 8, raw=True)
 
 dashboard = {'datasets': datasets, 'pages': pages, 'uiSettings': {'theme': {
     'canvasBackgroundColor': {'light': '#FAF7F2', 'dark': '#202123'},
@@ -232,6 +241,7 @@ examples = [
  sum(published_checks) published_checks, sum(published_checks)*1.0/nullif(sum(identifiable_checks),0) coverage_ratio
  FROM {DB}.gold_publication_coverage WHERE is_demo=false''')]
 table_descriptions = {
+ 'gold_menu_discount_scorecard': 'Item presence per 100 published tickets with positive or zero ticket discount, by category/item, store and day. Show both group sizes. Store-day denominators repeat across items. For pooled rates obtain all cohort denominators from silver_checks; never sum across items or average rates. The gap describes basket association only.',
  'gold_daily_sales': 'Published store-day ticket counts and normalized amounts. Primary executive KPI source; weight averages.',
  'gold_hourly_sales': 'Published store/date/POS-hour demand and normalized amounts; not a seasonality model.',
  'gold_channel_hourly': 'Published store/date/hour/channel facts. Source channels require interpretation.',

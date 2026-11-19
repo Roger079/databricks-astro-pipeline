@@ -43,6 +43,13 @@
       ]
     },
     {
+      "name": "menu_discount_scorecard",
+      "displayName": "Menu Discount Scorecard",
+      "queryLines": [
+        "SELECT * FROM workspace.astro_taco_main_real.gold_menu_discount_scorecard WHERE is_demo = false"
+      ]
+    },
+    {
       "name": "tickets",
       "displayName": "Tickets",
       "queryLines": [
@@ -1101,6 +1108,144 @@
             "width": 12,
             "height": 7
           }
+        },
+        {
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Menu and discount scorecard\nFilter to one store and date. Compare how many of every 100 tickets contained each item in each discount group. A positive gap means the item appeared more often in discounted baskets. Read the ticket counts alongside the gap. A blank rate means that group had no tickets."
+              ]
+            },
+            "name": "w_36"
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "menu_discount_scorecard",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    },
+                    {
+                      "name": "report_group",
+                      "expression": "`report_group`"
+                    },
+                    {
+                      "name": "menu_item",
+                      "expression": "`menu_item`"
+                    },
+                    {
+                      "name": "discounted_per_100",
+                      "expression": "`discounted_per_100`"
+                    },
+                    {
+                      "name": "zero_discount_per_100",
+                      "expression": "`zero_discount_per_100`"
+                    },
+                    {
+                      "name": "gap_percentage_points",
+                      "expression": "`gap_percentage_points`"
+                    },
+                    {
+                      "name": "discounted_with_item",
+                      "expression": "`discounted_with_item`"
+                    },
+                    {
+                      "name": "discounted_tickets",
+                      "expression": "`discounted_tickets`"
+                    },
+                    {
+                      "name": "zero_discount_with_item",
+                      "expression": "`zero_discount_with_item`"
+                    },
+                    {
+                      "name": "zero_discount_tickets",
+                      "expression": "`zero_discount_tickets`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "frame": {
+                "showTitle": true,
+                "title": "Item frequency by ticket discount status"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store Id"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business Date"
+                  },
+                  {
+                    "fieldName": "report_group",
+                    "displayName": "Report Group"
+                  },
+                  {
+                    "fieldName": "menu_item",
+                    "displayName": "Menu Item"
+                  },
+                  {
+                    "fieldName": "discounted_per_100",
+                    "displayName": "Discounted Per 100"
+                  },
+                  {
+                    "fieldName": "zero_discount_per_100",
+                    "displayName": "Zero Discount Per 100"
+                  },
+                  {
+                    "fieldName": "gap_percentage_points",
+                    "displayName": "Gap Percentage Points"
+                  },
+                  {
+                    "fieldName": "discounted_with_item",
+                    "displayName": "Discounted With Item"
+                  },
+                  {
+                    "fieldName": "discounted_tickets",
+                    "displayName": "Discounted Tickets"
+                  },
+                  {
+                    "fieldName": "zero_discount_with_item",
+                    "displayName": "Zero Discount With Item"
+                  },
+                  {
+                    "fieldName": "zero_discount_tickets",
+                    "displayName": "Zero Discount Tickets"
+                  }
+                ]
+              }
+            },
+            "name": "w_37"
+          },
+          "position": {
+            "x": 0,
+            "y": 18,
+            "width": 12,
+            "height": 8
+          }
         }
       ]
     },
@@ -1775,6 +1920,19 @@
                   ],
                   "disaggregated": false
                 }
+              },
+              {
+                "name": "menu_discount_scorecard_business_date",
+                "query": {
+                  "datasetName": "menu_discount_scorecard",
+                  "fields": [
+                    {
+                      "name": "business_date",
+                      "expression": "`business_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
               }
             ],
             "spec": {
@@ -1821,6 +1979,11 @@
                     "fieldName": "business_date",
                     "displayName": "Business date — validated two days",
                     "queryName": "profiles_business_date"
+                  },
+                  {
+                    "fieldName": "business_date",
+                    "displayName": "Business date — validated two days",
+                    "queryName": "menu_discount_scorecard_business_date"
                   }
                 ]
               },
@@ -1944,6 +2107,19 @@
                   ],
                   "disaggregated": false
                 }
+              },
+              {
+                "name": "menu_discount_scorecard_store_id",
+                "query": {
+                  "datasetName": "menu_discount_scorecard",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
               }
             ],
             "spec": {
@@ -1990,6 +2166,11 @@
                     "fieldName": "store_id",
                     "displayName": "Store",
                     "queryName": "profiles_store_id"
+                  },
+                  {
+                    "fieldName": "store_id",
+                    "displayName": "Store",
+                    "queryName": "menu_discount_scorecard_store_id"
                   }
                 ]
               },

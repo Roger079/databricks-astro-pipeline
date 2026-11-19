@@ -49,6 +49,12 @@
         ]
       },
       {
+        "identifier": "workspace.astro_taco_main_real.gold_menu_discount_scorecard",
+        "description": [
+          "Item presence per 100 published tickets with positive or zero ticket discount, by category/item, store and day. Show both group sizes. Store-day denominators repeat across items. For pooled rates obtain all cohort denominators from silver_checks; never sum across items or average rates. The gap describes basket association only."
+        ]
+      },
+      {
         "identifier": "workspace.astro_taco_main_real.gold_menu_performance",
         "description": [
           "Published store-day category/item units and source item discounts. No product revenue; bundle components present."
