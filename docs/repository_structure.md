@@ -25,6 +25,7 @@ databricks-astro-pipeline/
 |           |-- mv_store_daily.py
 |           |-- mv_channel_hourly.py
 |           |-- mv_item_daily.py
+|           |-- mv_menu_discount_scorecard.sql
 |           `-- mv_data_quality.py
 |-- notebooks/
 |-- config/

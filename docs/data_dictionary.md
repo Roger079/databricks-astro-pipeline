@@ -1,5 +1,25 @@
 # Diccionario y grano de las tablas
 
+## Menu and discount scorecard
+
+`gold_menu_discount_scorecard` has one row per observed store, date, demo flag,
+category and named menu item with a positive price and quantity on a published
+ticket. Known zero-price components, voids and monetary adjustments drop out.
+Some priced items may still be part of combos. The discount belongs to the ticket.
+
+For each item, compare the share of positive-ticket-discount baskets containing
+it with the share among zero-ticket-discount baskets. Each denominator includes
+all published tickets in that cohort at the store on that date. A missing cohort
+produces a null rate. The gap is the first rate minus the second in percentage
+points. A positive gap describes an association.
+
+Filter by store/date and inspect both sample sizes alongside the gap. Rows exist
+only where the item occurred. For a chainwide rate, sum the item counts and get
+the full cohort denominators directly from published checks across the selected
+stores/dates. Summing denominators across menu items double counts baskets.
+
+## Pipeline tables
+
 Todas las tablas se crean en el esquema exclusivo configurado. is_demo distingue
 datos sintéticos; source_table/loaded_at trazan la ingesta. Importes DECIMAL(20,4).
 
