@@ -13,7 +13,7 @@ resources:
           min_retry_interval_millis: 60000
           timeout_seconds: 7200
           notebook_task:
-            notebook_path: ../../notebooks/01_ingest.py
+            notebook_path: ./01_ingest.py
             base_parameters:
               catalog: ${var.catalog}
               schema: ${var.schema}
@@ -32,7 +32,7 @@ resources:
           depends_on:
             - task_key: transform
           notebook_task:
-            notebook_path: ../../notebooks/03_validate.py
+            notebook_path: ./03_validate.py
             base_parameters:
               catalog: ${var.catalog}
               schema: ${var.schema}
@@ -41,7 +41,7 @@ resources:
           depends_on:
             - task_key: validate
           notebook_task:
-            notebook_path: ../../notebooks/04_analysis.py
+            notebook_path: ./04_analysis.py
             base_parameters:
               catalog: ${var.catalog}
               schema: ${var.schema}

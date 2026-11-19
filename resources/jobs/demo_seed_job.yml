@@ -9,7 +9,7 @@ targets:
           tasks:
             - task_key: seed
               notebook_task:
-                notebook_path: ../../notebooks/00_demo_source.py
+                notebook_path: ./00_demo_source.py
                 base_parameters:
                   catalog: ${var.catalog}
                   schema: ${var.schema}

@@ -7,3 +7,14 @@ data/
 .env
 tmp/
 output/
+
+# Supporting materials maintained locally outside the submission layout.
+/config/
+/dashboards/
+/docs/
+/genie/
+/notebooks/
+/scripts/
+/tests/
+/validation/
+/requirements-test.txt

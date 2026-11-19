@@ -68,11 +68,13 @@ Reliable promotion lift, seasonality, and cannibalization analysis require valid
 
 Databricks · Delta Lake · Lakeflow · Python · SQL · AI/BI Dashboards · Genie
 
-## Further reading
+## Repository layout
 
-- [Repository structure](docs/repository_structure.md)
-- [Architecture](docs/architecture.md)
-- [Data dictionary](docs/data_dictionary.md)
-- [Data contract and financial definitions](docs/data_contract.md)
-- [Analytical findings](docs/findings.md)
-- [Promotion analytics methodology](docs/dashboard_plan.md)
+| Folder | Contents |
+| --- | --- |
+| [resources/jobs](resources/jobs) | Job definitions and the notebooks their tasks execute |
+| [resources/pipelines](resources/pipelines) | Lakeflow configuration and transformation discovery |
+| [src/transformations/silver](src/transformations/silver) | Record classification, ticket reconstruction and scoped financial rules |
+| [src/transformations/gold](src/transformations/gold) | Business metrics, menu discount scorecard and quality summaries |
+
+The root `databricks.yml` connects these resources. An authorized project member can validate the real configuration with `databricks bundle validate -t dev -p datathon --strict`. The daily job runs ingestion, transformations, validation and analysis in order. Its scheduled trigger is paused.
