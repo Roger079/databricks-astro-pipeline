@@ -1,7 +1,7 @@
 {
   "sql_validation": {
     "daily": {
-      "statement_id": "01f1d42e-ecbd-148c-9c29-b67fcce5722e",
+      "statement_id": "01f1e461-d620-1c74-9069-db41f5146499",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -66,23 +66,23 @@
         },
         {
           "business_date": "2025-12-31",
-          "store_id": "9788",
+          "store_id": "8108",
           "is_demo": "false",
-          "transactions": "154",
-          "reported_total": "2561.6000",
-          "reported_tax": "210.9700",
-          "reported_discount": "4.1900",
-          "customer_total": "2768.3800",
-          "merchandise_after_discount": "2557.4100",
-          "average_ticket": "17.97649351",
-          "average_duration_seconds": "121.5584415584416",
-          "duration_observations": "154",
-          "duration_seconds_sum": "18720.000000000"
+          "transactions": "208",
+          "reported_total": "3715.8200",
+          "reported_tax": "280.7300",
+          "reported_discount": "33.9200",
+          "customer_total": "3715.8200",
+          "merchandise_after_discount": "3435.0900",
+          "average_ticket": "17.86451923",
+          "average_duration_seconds": "298.2608695652174",
+          "duration_observations": "207",
+          "duration_seconds_sum": "61740.000000000"
         }
       ]
     },
     "hourly": {
-      "statement_id": "01f1d42e-ed3c-1ef8-8a62-c4255a7e684d",
+      "statement_id": "01f1e461-ddc6-1b14-a355-715bfd0e60f3",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -143,68 +143,68 @@
       ]
     },
     "channels": {
-      "statement_id": "01f1d42e-edbb-1276-a920-91c0f654c981",
+      "statement_id": "01f1e461-dec5-19d1-8caa-166632dd6156",
       "state": "SUCCEEDED",
       "rows": [
         {
           "business_date": "2026-01-01",
-          "store_id": "6143",
+          "store_id": "7005",
           "start_hour": "13",
-          "channel": "3",
+          "channel": "Carry Out",
           "is_demo": "false",
-          "transactions": "1",
-          "reported_total": "11.8500",
-          "customer_total": "12.8300",
-          "merchandise_after_discount": "11.8500"
-        },
-        {
-          "business_date": "2025-12-31",
-          "store_id": "9729",
-          "start_hour": "16",
-          "channel": "Dine-In",
-          "is_demo": "false",
-          "transactions": "1",
-          "reported_total": "20.2100",
-          "customer_total": "20.2100",
-          "merchandise_after_discount": "18.6700"
-        },
-        {
-          "business_date": "2025-12-31",
-          "store_id": "8509",
-          "start_hour": "10",
-          "channel": "To Go",
-          "is_demo": "false",
-          "transactions": "8",
-          "reported_total": "100.9800",
-          "customer_total": "109.3100",
-          "merchandise_after_discount": "100.9800"
-        },
-        {
-          "business_date": "2025-12-31",
-          "store_id": "7006",
-          "start_hour": "10",
-          "channel": "To Go",
-          "is_demo": "false",
-          "transactions": "10",
-          "reported_total": "132.7500",
-          "customer_total": "143.5100",
-          "merchandise_after_discount": "132.7500"
+          "transactions": "5",
+          "reported_total": "36.2500",
+          "customer_total": "36.2500",
+          "merchandise_after_discount": "33.4800"
         },
         {
           "business_date": "2026-01-01",
-          "store_id": "9392",
-          "start_hour": "19",
-          "channel": "Drive Thru",
+          "store_id": "9729",
+          "start_hour": "16",
+          "channel": "Carry Out",
           "is_demo": "false",
-          "transactions": "7",
-          "reported_total": "78.8500",
-          "customer_total": "78.8500",
-          "merchandise_after_discount": "72.9600"
+          "transactions": "3",
+          "reported_total": "55.9100",
+          "customer_total": "55.9100",
+          "merchandise_after_discount": "51.6500"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "5913",
+          "start_hour": "10",
+          "channel": "Carry Out",
+          "is_demo": "false",
+          "transactions": "3",
+          "reported_total": "36.4900",
+          "customer_total": "36.4900",
+          "merchandise_after_discount": "33.7100"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "6332",
+          "start_hour": "12",
+          "channel": "Dine-In",
+          "is_demo": "false",
+          "transactions": "3",
+          "reported_total": "28.1700",
+          "customer_total": "28.1700",
+          "merchandise_after_discount": "26.0200"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "5026",
+          "start_hour": "12",
+          "channel": "Dine-In",
+          "is_demo": "false",
+          "transactions": "2",
+          "reported_total": "73.8200",
+          "customer_total": "73.8200",
+          "merchandise_after_discount": "68.2700"
         }
       ]
     },
     "menu": {
-      "statement_id": "01f1d42e-ee3c-1a75-b776-ff863fed5c4c",
+      "statement_id": "01f1e461-dfc8-1680-a75d-00816bf2fbd5",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -242,17 +242,6 @@
         },
         {
           "business_date": "2025-12-31",
-          "store_id": "8241",
-          "report_group": "(M) LTO/Promo",
-          "menu_item": "Tamale Platter",
-          "is_demo": "false",
-          "units": "1.0000",
-          "line_count": "1",
-          "reported_line_total": null,
-          "item_discount": "0.0000"
-        },
-        {
-          "business_date": "2025-12-31",
           "store_id": "6805",
           "report_group": "(M) Sides",
           "menu_item": "Firehouse Salsa (NR)",
@@ -261,11 +250,22 @@
           "line_count": "1",
           "reported_line_total": null,
           "item_discount": "0.0000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "8112",
+          "report_group": "(M) Beverages",
+          "menu_item": "Small Sweet Tea",
+          "is_demo": "false",
+          "units": "0.0000",
+          "line_count": "1",
+          "reported_line_total": null,
+          "item_discount": "0.0000"
         }
       ]
     },
     "coverage": {
-      "statement_id": "01f1d42e-eeb6-1af1-9d4b-086071a922fa",
+      "statement_id": "01f1e461-e0c1-1e0e-bdf5-8f5f68ffb8a7",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -310,18 +310,18 @@
         },
         {
           "business_date": "2025-12-31",
-          "store_id": "9788",
+          "store_id": "8108",
           "is_demo": "false",
-          "identifiable_checks": "154",
-          "published_checks": "154",
+          "identifiable_checks": "208",
+          "published_checks": "208",
           "equation_exception_checks": "0",
           "unknown_profile_checks": "0",
-          "checks_with_repeated_rows": "43"
+          "checks_with_repeated_rows": "158"
         }
       ]
     },
     "quality": {
-      "statement_id": "01f1d42e-ef3c-1710-9e3b-bc1fce5207c7",
+      "statement_id": "01f1e461-e1a5-16c8-a0f2-824a5a69f635",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -339,78 +339,154 @@
           "invalid_duration_rows": "20804",
           "assumed_overnight_rows": "23",
           "unknown_channel_rows": "0",
-          "loaded_at": "2026-10-30T06:17:45.101Z"
+          "loaded_at": "2026-11-19T21:37:28.388Z"
+        }
+      ]
+    },
+    "menu_discount_scorecard": {
+      "statement_id": "01f1e461-e293-174b-973d-cd0aba92a057",
+      "state": "SUCCEEDED",
+      "rows": [
+        {
+          "store_id": "8286",
+          "business_date": "2026-01-01",
+          "is_demo": "false",
+          "report_group": "(M) Tacos",
+          "menu_item": "Beef Crispy Taco",
+          "discounted_with_item": "4",
+          "zero_discount_with_item": "39",
+          "discounted_tickets": "26",
+          "zero_discount_tickets": "251",
+          "discounted_per_100": "15.38461538461538",
+          "zero_discount_per_100": "15.53784860557769",
+          "gap_percentage_points": "-0.1532332209623"
+        },
+        {
+          "store_id": "8714",
+          "business_date": "2025-12-31",
+          "is_demo": "false",
+          "report_group": "(M) Tacos",
+          "menu_item": "Grilled Chicken Taco Rollup",
+          "discounted_with_item": "1",
+          "zero_discount_with_item": "10",
+          "discounted_tickets": "4",
+          "zero_discount_tickets": "132",
+          "discounted_per_100": "25.00000000000000",
+          "zero_discount_per_100": "7.57575757575758",
+          "gap_percentage_points": "17.4242424242424"
+        },
+        {
+          "store_id": "7185",
+          "business_date": "2025-12-31",
+          "is_demo": "false",
+          "report_group": "(M) Burritos",
+          "menu_item": "Wholotta Box (12 burritos)",
+          "discounted_with_item": "0",
+          "zero_discount_with_item": "2",
+          "discounted_tickets": "18",
+          "zero_discount_tickets": "182",
+          "discounted_per_100": "0E-14",
+          "zero_discount_per_100": "1.09890109890110",
+          "gap_percentage_points": "-1.0989010989011"
+        },
+        {
+          "store_id": "8113",
+          "business_date": "2026-01-01",
+          "is_demo": "false",
+          "report_group": "(M) Tacos",
+          "menu_item": "Beef Soft Taco",
+          "discounted_with_item": "2",
+          "zero_discount_with_item": "17",
+          "discounted_tickets": "15",
+          "zero_discount_tickets": "219",
+          "discounted_per_100": "13.33333333333333",
+          "zero_discount_per_100": "7.76255707762557",
+          "gap_percentage_points": "5.5707762557078"
+        },
+        {
+          "store_id": "8714",
+          "business_date": "2026-01-01",
+          "is_demo": "false",
+          "report_group": "(M) Bueno Under a Buck",
+          "menu_item": "Party Taco",
+          "discounted_with_item": "1",
+          "zero_discount_with_item": "15",
+          "discounted_tickets": "8",
+          "zero_discount_tickets": "190",
+          "discounted_per_100": "12.50000000000000",
+          "zero_discount_per_100": "7.89473684210526",
+          "gap_percentage_points": "4.6052631578947"
         }
       ]
     },
     "tickets": {
-      "statement_id": "01f1d42e-efc2-1bd0-8643-2b06c598b753",
+      "statement_id": "01f1e461-e37a-11f7-affe-17735923a8e8",
       "state": "SUCCEEDED",
       "rows": [
         {
-          "business_date": "2026-01-01",
-          "store_id": "5520",
-          "check_number": "96873125777487",
-          "channel": "Carry Out",
-          "financial_profile": "A_TAX_INCLUSIVE",
-          "customer_total": "11.9800",
-          "merchandise_after_discount": "11.0700",
+          "business_date": "2025-12-31",
+          "store_id": "7401",
+          "check_number": "118255",
+          "channel": "To Go",
+          "financial_profile": "B_PRE_DISCOUNT",
+          "customer_total": "25.9000",
+          "merchandise_after_discount": "23.9300",
           "reported_discount": "0.0000",
-          "reported_tax": "0.9100",
+          "reported_tax": "1.9700",
           "discount_cohort": "No ticket discount"
         },
         {
           "business_date": "2026-01-01",
-          "store_id": "7577",
-          "check_number": "96598247872702",
+          "store_id": "8108",
+          "check_number": "97422881593512",
           "channel": "Drive Thru",
           "financial_profile": "A_TAX_INCLUSIVE",
-          "customer_total": "18.7900",
-          "merchandise_after_discount": "17.3600",
+          "customer_total": "25.2800",
+          "merchandise_after_discount": "23.3500",
           "reported_discount": "0.0000",
-          "reported_tax": "1.4300",
-          "discount_cohort": "No ticket discount"
-        },
-        {
-          "business_date": "2026-01-01",
-          "store_id": "7277",
-          "check_number": "98384954265652",
-          "channel": "Dine-In",
-          "financial_profile": "A_TAX_INCLUSIVE",
-          "customer_total": "10.2700",
-          "merchandise_after_discount": "9.4900",
-          "reported_discount": "0.0000",
-          "reported_tax": "0.7800",
-          "discount_cohort": "No ticket discount"
-        },
-        {
-          "business_date": "2026-01-01",
-          "store_id": "9050",
-          "check_number": "101305532024880",
-          "channel": "Dine-In",
-          "financial_profile": "A_TAX_INCLUSIVE",
-          "customer_total": "10.2700",
-          "merchandise_after_discount": "9.4900",
-          "reported_discount": "0.0000",
-          "reported_tax": "0.7800",
+          "reported_tax": "1.9300",
           "discount_cohort": "No ticket discount"
         },
         {
           "business_date": "2025-12-31",
-          "store_id": "8286",
-          "check_number": "97491598972960",
-          "channel": "Drive Thru",
-          "financial_profile": "A_TAX_INCLUSIVE",
-          "customer_total": "19.5400",
-          "merchandise_after_discount": "18.0500",
+          "store_id": "7940",
+          "check_number": "198081",
+          "channel": "To Go",
+          "financial_profile": "B_PRE_DISCOUNT",
+          "customer_total": "14.6400",
+          "merchandise_after_discount": "13.5200",
           "reported_discount": "0.0000",
-          "reported_tax": "1.4900",
+          "reported_tax": "1.1200",
+          "discount_cohort": "No ticket discount"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "9392",
+          "check_number": "97457241329679",
+          "channel": "Dine-In",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "30.2700",
+          "merchandise_after_discount": "27.9600",
+          "reported_discount": "0.0000",
+          "reported_tax": "2.3100",
+          "discount_cohort": "No ticket discount"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "7005",
+          "check_number": "96735684724789",
+          "channel": "Carry Out",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "customer_total": "23.7900",
+          "merchandise_after_discount": "21.9800",
+          "reported_discount": "0.0000",
+          "reported_tax": "1.8100",
           "discount_cohort": "No ticket discount"
         }
       ]
     },
     "reviews": {
-      "statement_id": "01f1d42e-f048-12f2-87d9-b3e37b9ea2d1",
+      "statement_id": "01f1e461-e459-158a-babc-d493c1579691",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -456,40 +532,40 @@
       ]
     },
     "profiles": {
-      "statement_id": "01f1d42e-f0d5-160e-b4c2-90aad3654901",
+      "statement_id": "01f1e461-e54a-1137-9f32-3fdc6a3dffdf",
       "state": "SUCCEEDED",
       "rows": [
         {
-          "business_date": "2026-01-01",
-          "store_id": "5520",
-          "financial_profile": "A_TAX_INCLUSIVE",
+          "business_date": "2025-12-31",
+          "store_id": "7401",
+          "financial_profile": "B_PRE_DISCOUNT",
           "is_publishable": "true",
           "reconciliation_residual": "0.000000"
         },
         {
           "business_date": "2026-01-01",
-          "store_id": "7577",
-          "financial_profile": "A_TAX_INCLUSIVE",
-          "is_publishable": "true",
-          "reconciliation_residual": "0.000000"
-        },
-        {
-          "business_date": "2026-01-01",
-          "store_id": "7277",
-          "financial_profile": "A_TAX_INCLUSIVE",
-          "is_publishable": "true",
-          "reconciliation_residual": "0.000000"
-        },
-        {
-          "business_date": "2026-01-01",
-          "store_id": "9050",
+          "store_id": "8108",
           "financial_profile": "A_TAX_INCLUSIVE",
           "is_publishable": "true",
           "reconciliation_residual": "0.000000"
         },
         {
           "business_date": "2025-12-31",
-          "store_id": "8286",
+          "store_id": "7940",
+          "financial_profile": "B_PRE_DISCOUNT",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2026-01-01",
+          "store_id": "9392",
+          "financial_profile": "A_TAX_INCLUSIVE",
+          "is_publishable": "true",
+          "reconciliation_residual": "0.000000"
+        },
+        {
+          "business_date": "2025-12-31",
+          "store_id": "7005",
           "financial_profile": "A_TAX_INCLUSIVE",
           "is_publishable": "true",
           "reconciliation_residual": "0.000000"
@@ -497,19 +573,19 @@
       ]
     },
     "snapshot": {
-      "statement_id": "01f1d42e-f158-10a9-ba14-d2e6b0258f91",
+      "statement_id": "01f1e461-e643-14e2-b046-84bcffcf1f08",
       "state": "SUCCEEDED",
       "rows": [
         {
           "source_table": "workspace.default.tb_daily_tld_01_01_2026_m",
           "delta_version": "1",
-          "loaded_at": "2026-10-30T06:17:45.101Z",
+          "loaded_at": "2026-11-19T21:37:28.388Z",
           "source_rows": "284428"
         }
       ]
     },
     "decisions": {
-      "statement_id": "01f1d42e-f1d4-1c11-9168-0ec4da9c1097",
+      "statement_id": "01f1e461-e736-1ac9-879c-b8c4b8616c57",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -556,7 +632,7 @@
     },
     "w_2": {
       "title": "Customer amount incl. tax",
-      "statement_id": "01f1d42e-f258-1c2a-9c2d-9ca4ed389a22",
+      "statement_id": "01f1e461-e83c-17a3-9dad-35bafb38f058",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -566,7 +642,7 @@
     },
     "w_3": {
       "title": "Merchandise amount excl. tax",
-      "statement_id": "01f1d42e-f2da-11d4-ad4a-ce3dee1737fb",
+      "statement_id": "01f1e461-e8c3-1916-991a-795c369995d6",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -576,7 +652,7 @@
     },
     "w_4": {
       "title": "Published tickets",
-      "statement_id": "01f1d42e-f357-1e3b-8da2-77835690afa7",
+      "statement_id": "01f1e461-e954-1bac-829a-c16c7dfdcbfe",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -586,7 +662,7 @@
     },
     "w_5": {
       "title": "Weighted average ticket",
-      "statement_id": "01f1d42e-f3da-1994-8a58-177396b47d8c",
+      "statement_id": "01f1e461-e9e6-1d4b-8d44-6671f2fc06e6",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -596,7 +672,7 @@
     },
     "w_10": {
       "title": "Share of tickets with a positive ticket discount",
-      "statement_id": "01f1d42e-f5e7-1570-8090-453686e2fca4",
+      "statement_id": "01f1e461-ec0d-1f85-83f6-8885b8bd0664",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -606,7 +682,7 @@
     },
     "w_11": {
       "title": "Ticket discount depth",
-      "statement_id": "01f1d42e-f667-140c-8d14-6ee817713cf4",
+      "statement_id": "01f1e461-ec9c-15fc-831a-0193c5b190a4",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -616,7 +692,7 @@
     },
     "w_12": {
       "title": "Reported ticket discounts — once per check",
-      "statement_id": "01f1d42e-f70d-1c13-890c-1484ee012674",
+      "statement_id": "01f1e461-ed24-1052-8303-d5a28eba1c4e",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -626,7 +702,7 @@
     },
     "w_26": {
       "title": "Published / identifiable checks",
-      "statement_id": "01f1d42e-fbf3-10ce-93c7-15e89af74047",
+      "statement_id": "01f1e461-f1d7-1387-87a6-d05ea84b8478",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -636,7 +712,7 @@
     },
     "w_27": {
       "title": "Financial review checks",
-      "statement_id": "01f1d42e-fc70-1971-babb-32e08f7a8d45",
+      "statement_id": "01f1e461-f259-1cf4-9061-b7a740d18cfe",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -646,7 +722,7 @@
     },
     "w_28": {
       "title": "Equation exception checks (overlapping review reason)",
-      "statement_id": "01f1d42e-fcf8-146c-9ff1-97ebf1b32559",
+      "statement_id": "01f1e461-f2e9-1dc2-8acc-e0ebc23901f7",
       "state": "SUCCEEDED",
       "rows": [
         {
@@ -655,8 +731,8 @@
       ]
     }
   },
-  "validated_widget_count": 24,
-  "captured_at_utc": "2026-10-30T06:56:12.823258+00:00",
+  "validated_widget_count": 25,
+  "captured_at_utc": "2026-11-19T21:41:21.380264+00:00",
   "genie_space_id": "01f1d42ecb0a156c8ba220f1312dc57c",
   "dashboard_id": "01f1d42ecb9314b996d9c68d88de031e",
   "dashboards_permissions": {
@@ -771,7 +847,7 @@
     "display_name": "Taco Bueno | Pricing & Promotion Decision Lab",
     "warehouse_id": "2b3b47b4d4cf4f3d",
     "embed_credentials": false,
-    "revision_create_time": "2026-10-30T06:56:17.851Z"
+    "revision_create_time": "2026-11-19T21:41:25.388Z"
   },
   "warehouse_id": "2b3b47b4d4cf4f3d",
   "data_schema": "workspace.astro_taco_main_real",
@@ -804,5 +880,14 @@
       "answer": "This question is not directly answerable with the available data. There is no campaign identity, baseline, or historical data in the provided tables to determine which promotions should be kept, stopped, or brought back, nor to establish promotion lift, seasonality, or cannibalization. Only descriptive comparisons of ticket discount presence can be made for the two holiday days; causal evidence requires a controlled test or further investigation."
     }
   ],
-  "visual_ui_verified": false
+  "visual_ui_verified": false,
+  "scorecard_verification": {
+    "run_id": 891503667513771,
+    "statement_id": "01f1e461-fef8-173c-8dad-4044e4c3cc20",
+    "scorecard_rows": "17275",
+    "stores": "114",
+    "first_date": "2025-12-31",
+    "last_date": "2026-01-01",
+    "invalid_counts": "0"
+  }
 }
