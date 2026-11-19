@@ -259,6 +259,14 @@ class PipelineTests(unittest.TestCase):
         libraries = yaml.safe_load((ROOT/'resources/pipelines/lakeflow_pipeline.yml').read_text())['resources']['pipelines']['taco_pipeline']['libraries']
         self.assertEqual(libraries, [{'glob': {'include': '../../src/transformations/**'}}])
         self.assertEqual(job['schedule']['pause_status'], 'PAUSED')
+        # The synthetic seed remains demo-only after extracting its resource file.
+        bundle = yaml.safe_load((ROOT/'databricks.yml').read_text())
+        self.assertNotIn('resources', bundle['targets']['demo'])
+        demo_resource = yaml.safe_load((ROOT/'resources/jobs/demo_seed_job.yml').read_text())
+        self.assertEqual(set(demo_resource['targets']), {'demo'})
+        seed = demo_resource['targets']['demo']['resources']['jobs']['seed_demo']
+        for task in seed['tasks']:
+            self.assertTrue((ROOT/'resources/jobs'/task['notebook_task']['notebook_path']).resolve().is_file())
         keys = {task['task_key'] for task in job['tasks']}
         for task in job['tasks']:
             self.assertNotIn('existing_cluster_id', task)

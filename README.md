@@ -70,6 +70,7 @@ Databricks · Delta Lake · Lakeflow · Python · SQL · AI/BI Dashboards · Gen
 
 ## Further reading
 
+- [Repository structure](docs/repository_structure.md)
 - [Architecture](docs/architecture.md)
 - [Data dictionary](docs/data_dictionary.md)
 - [Data contract and financial definitions](docs/data_contract.md)
