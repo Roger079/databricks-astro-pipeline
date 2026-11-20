@@ -25,6 +25,8 @@ test('published basket counts, comparable stores and directional menu pairs', ()
   basket('B', '2026-01-01', 0, 1, 2, ['Drink']);
   basket('B', '2026-01-01', 0, 2, 0, ['Taco']);
   basket('A', '2026-01-02', 0, 1, 2, ['Taco']); // One cohort only.
+  basket('C', '2026-01-01', 0, 1, 2, ['Drink']); // Comparable, with zero Taco orders.
+  basket('C', '2026-01-01', 0, 2, 0, ['Drink']);
   basket('A', '2026-01-01', 1, 1, 2, ['Taco', 'Drink']); // Separate demo.
   item.run('A', '2026-01-01', 0, 1, 'Menu', 'Voided', 'voided_item', 1, 5);
   item.run('A', '2026-01-01', 0, 1, 'Menu', 'Component', 'discounted_item', 1, 0);
@@ -37,11 +39,12 @@ test('published basket counts, comparable stores and directional menu pairs', ()
   }
   const taco = db.prepare("SELECT * FROM gold_menu_discount_comparison WHERE is_demo=0 AND menu_item='Taco'").get();
   assert.deepEqual([taco.comparable_stores, taco.comparable_store_days, taco.stores_higher,
-    taco.stores_lower, taco.stores_equal], [2, 2, 1, 1, 0]);
+    taco.stores_lower, taco.stores_equal], [3, 3, 1, 1, 1]);
   assert.deepEqual([taco.discounted_with_item, taco.discounted_tickets,
-    taco.zero_discount_with_item, taco.zero_discount_tickets], [1, 2, 2, 3]);
-  assert.equal(taco.discounted_per_100, 50);
-  assert.ok(Math.abs(taco.zero_discount_per_100 - 200 / 3) < 0.0001);
+    taco.zero_discount_with_item, taco.zero_discount_tickets], [1, 3, 2, 4]);
+  assert.ok(Math.abs(taco.discounted_per_100 - 100 / 3) < 0.0001);
+  assert.equal(taco.zero_discount_per_100, 50);
+  assert.ok(Math.abs(taco.matched_gap_pp + 50 / 3) < 0.0001);
   const pairs = db.prepare('SELECT * FROM gold_menu_pairs WHERE is_demo=0 ORDER BY menu_item').all();
   assert.deepEqual(pairs.map(p => [p.menu_item, p.companion_item, p.pair_tickets,
     p.anchor_tickets, p.companion_tickets, p.published_tickets, p.companion_per_100_anchor]),
